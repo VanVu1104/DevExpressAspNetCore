@@ -29,5 +29,5 @@ public partial class NoteDonHang
 
     [ForeignKey("Iddh")]
     [InverseProperty("NoteDonHangs")]
-    public virtual DonHang IddhNavigation { get; set; }
+    public virtual ViewModels.DonHang IddhNavigation { get; set; }
 }

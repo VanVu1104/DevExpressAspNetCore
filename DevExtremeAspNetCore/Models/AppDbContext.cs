@@ -19,7 +19,7 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<Ctdh> Ctdhs { get; set; }
 
-    public virtual DbSet<DonHang> DonHangs { get; set; }
+    public virtual DbSet<ViewModels.DonHang> DonHangs { get; set; }
 
     public virtual DbSet<Image> Images { get; set; }
 
@@ -39,7 +39,7 @@ public partial class AppDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=QLMayMac;Trusted_Connection=True;TrustServerCertificate=True;");
+        => optionsBuilder.UseSqlServer("Server=LAPTOP-LGQDV4F7\\SQLEXPRESS;Database=QLMayMac;Trusted_Connection=True;TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -61,7 +61,7 @@ public partial class AppDbContext : DbContext
                 .HasConstraintName("FK__CTDH__IDVariant__37A5467C");
         });
 
-        modelBuilder.Entity<DonHang>(entity =>
+        modelBuilder.Entity<ViewModels.DonHang>(entity =>
         {
             entity.HasKey(e => e.Iddh).HasName("PK__DonHang__B87DB898102A0C7A");
         });
