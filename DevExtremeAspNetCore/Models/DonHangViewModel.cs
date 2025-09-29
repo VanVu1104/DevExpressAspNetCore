@@ -28,16 +28,16 @@ namespace DevExtremeAspNetCore.ViewModels
         public string Color { get; set; }
 
         // Số lượng theo size
-        public int XXS { get; set; }
-        public int XSM { get; set; }
-        public int SM { get; set; }
-        public int MED { get; set; }
-        public int LRG { get; set; }
-        public int XLG { get; set; }
-        public int XXL { get; set; }
+        public int S { get; set; }
+        public int M { get; set; }
+        public int L { get; set; }
+        public int XL { get; set; }
+        //public int LRG { get; set; }
+        //public int XLG { get; set; }
+        //public int XXL { get; set; }
 
         public int TongSoLuong =>
-            XXS + XSM + SM + MED + LRG + XLG + XXL;
+            S + M + L + XL;
 
         // Danh sách ảnh đơn hàng (mapping từ bảng Image)
         public List<DonHangImage> Images { get; set; } = new List<DonHangImage>();

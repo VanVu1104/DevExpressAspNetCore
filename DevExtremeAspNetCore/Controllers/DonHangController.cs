@@ -54,13 +54,13 @@ namespace DevExtremeAspNetCore.Controllers
                 ProductName = g.Key.ProductName,
                 Color = g.Key.Color,
                 Images = g.SelectMany(x => x.Images).ToList(),
-                XXS = g.Where(x => x.Size == "XXS").Sum(x => x.SoLuong ?? 0),
-                XSM = g.Where(x => x.Size == "XSM").Sum(x => x.SoLuong ?? 0),
-                SM = g.Where(x => x.Size == "SM").Sum(x => x.SoLuong ?? 0),
-                MED = g.Where(x => x.Size == "MED").Sum(x => x.SoLuong ?? 0),
-                LRG = g.Where(x => x.Size == "LRG").Sum(x => x.SoLuong ?? 0),
-                XLG = g.Where(x => x.Size == "XLG").Sum(x => x.SoLuong ?? 0),
-                XXL = g.Where(x => x.Size == "XXL").Sum(x => x.SoLuong ?? 0)
+                S = g.Where(x => x.Size == "XXS").Sum(x => x.SoLuong ?? 0),
+                M = g.Where(x => x.Size == "XSM").Sum(x => x.SoLuong ?? 0),
+                L = g.Where(x => x.Size == "SM").Sum(x => x.SoLuong ?? 0),
+                XL = g.Where(x => x.Size == "MED").Sum(x => x.SoLuong ?? 0),
+                //LRG = g.Where(x => x.Size == "LRG").Sum(x => x.SoLuong ?? 0),
+                //XLG = g.Where(x => x.Size == "XLG").Sum(x => x.SoLuong ?? 0),
+                //XXL = g.Where(x => x.Size == "XXL").Sum(x => x.SoLuong ?? 0)
             })
             .ToList();
 
@@ -108,13 +108,13 @@ namespace DevExtremeAspNetCore.Controllers
                     ProductName = g.Key.ProductName,
                     Color = g.Key.Color,
                     Images = g.SelectMany(x => x.Images).ToList(),
-                    XXS = g.Where(x => x.Size == "XXS").Sum(x => x.SoLuong ?? 0),
-                    XSM = g.Where(x => x.Size == "XSM").Sum(x => x.SoLuong ?? 0),
-                    SM = g.Where(x => x.Size == "SM").Sum(x => x.SoLuong ?? 0),
-                    MED = g.Where(x => x.Size == "MED").Sum(x => x.SoLuong ?? 0),
-                    LRG = g.Where(x => x.Size == "LRG").Sum(x => x.SoLuong ?? 0),
-                    XLG = g.Where(x => x.Size == "XLG").Sum(x => x.SoLuong ?? 0),
-                    XXL = g.Where(x => x.Size == "XXL").Sum(x => x.SoLuong ?? 0)
+                    S = g.Where(x => x.Size == "S").Sum(x => x.SoLuong ?? 0),
+                    M = g.Where(x => x.Size == "M").Sum(x => x.SoLuong ?? 0),
+                    L = g.Where(x => x.Size == "L").Sum(x => x.SoLuong ?? 0),
+                    XL = g.Where(x => x.Size == "XL").Sum(x => x.SoLuong ?? 0),
+                    //LRG = g.Where(x => x.Size == "LRG").Sum(x => x.SoLuong ?? 0),
+                    //XLG = g.Where(x => x.Size == "XLG").Sum(x => x.SoLuong ?? 0),
+                    //XXL = g.Where(x => x.Size == "XXL").Sum(x => x.SoLuong ?? 0)
                 })
                 .Where(dh => dh.TongSoLuong > 0)
                 .ToList();
