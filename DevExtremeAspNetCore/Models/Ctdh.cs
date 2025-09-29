@@ -23,7 +23,7 @@ public partial class Ctdh
 
     [ForeignKey("Iddh")]
     [InverseProperty("Ctdhs")]
-    public virtual DonHang IddhNavigation { get; set; }
+    public virtual ViewModels.DonHang IddhNavigation { get; set; }
 
     [ForeignKey("Idvariant")]
     [InverseProperty("Ctdhs")]
