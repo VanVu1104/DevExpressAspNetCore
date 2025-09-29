@@ -25,9 +25,9 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<ListNpl> ListNpls { get; set; }
 
-    public virtual DbSet<NoteNpl> NoteNpls { get; set; }
+    public virtual DbSet<NoteDonHang> NoteDonHangs { get; set; }
 
-    public virtual DbSet<NotePro> NotePros { get; set; }
+    public virtual DbSet<NoteNpl> NoteNpls { get; set; }
 
     public virtual DbSet<Npl> Npls { get; set; }
 
@@ -45,12 +45,12 @@ public partial class AppDbContext : DbContext
     {
         modelBuilder.Entity<Color>(entity =>
         {
-            entity.HasKey(e => e.Idcolor).HasName("PK__Color__E424D936D2A86117");
+            entity.HasKey(e => e.Idcolor).HasName("PK__Color__E424D936AD25C489");
         });
 
         modelBuilder.Entity<Ctdh>(entity =>
         {
-            entity.HasKey(e => e.Idctdh).HasName("PK__CTDH__0F87803D98718C49");
+            entity.HasKey(e => e.Idctdh).HasName("PK__CTDH__0F87803DDA3AB419");
 
             entity.HasOne(d => d.IddhNavigation).WithMany(p => p.Ctdhs)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -63,12 +63,12 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<DonHang>(entity =>
         {
-            entity.HasKey(e => e.Iddh).HasName("PK__DonHang__B87DB8981C37B85E");
+            entity.HasKey(e => e.Iddh).HasName("PK__DonHang__B87DB898102A0C7A");
         });
 
         modelBuilder.Entity<Image>(entity =>
         {
-            entity.HasKey(e => e.Idimg).HasName("PK__Image__9511D7555E4AF30C");
+            entity.HasKey(e => e.Idimg).HasName("PK__Image__9511D755E875E45C");
 
             entity.HasOne(d => d.IdvariantNavigation).WithMany(p => p.Images)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -77,7 +77,7 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<ListNpl>(entity =>
         {
-            entity.HasKey(e => e.Idlist).HasName("PK__ListNPL__F5D88C0D8CCEC6F5");
+            entity.HasKey(e => e.Idlist).HasName("PK__ListNPL__F5D88C0DA29C3B49");
 
             entity.HasOne(d => d.IdnplNavigation).WithMany(p => p.ListNpls)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -88,37 +88,37 @@ public partial class AppDbContext : DbContext
                 .HasConstraintName("FK__ListNPL__IDPro__3C69FB99");
         });
 
+        modelBuilder.Entity<NoteDonHang>(entity =>
+        {
+            entity.HasKey(e => e.Idnote).HasName("PK__NoteDonH__E5F1D2E7D8B3B91D");
+
+            entity.HasOne(d => d.IddhNavigation).WithMany(p => p.NoteDonHangs)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__NoteDonHan__IDDH__33D4B598");
+        });
+
         modelBuilder.Entity<NoteNpl>(entity =>
         {
-            entity.HasKey(e => e.IdnoteNpl).HasName("PK__NoteNPL__440A85EAE1151C67");
+            entity.HasKey(e => e.IdnoteNpl).HasName("PK__NoteNPL__440A85EA5091A5B9");
 
             entity.HasOne(d => d.IdnplNavigation).WithMany(p => p.NoteNpls)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__NoteNPL__IDNPL__403A8C7D");
         });
 
-        modelBuilder.Entity<NotePro>(entity =>
-        {
-            entity.HasKey(e => e.Idnote).HasName("PK__NotePro__E5F1D2E768BE0E90");
-
-            entity.HasOne(d => d.IdproNavigation).WithMany(p => p.NotePros)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__NotePro__IDPro__31EC6D26");
-        });
-
         modelBuilder.Entity<Npl>(entity =>
         {
-            entity.HasKey(e => e.Idnpl).HasName("PK__NPL__945ECD73E29CA42F");
+            entity.HasKey(e => e.Idnpl).HasName("PK__NPL__945ECD7310A1001F");
         });
 
         modelBuilder.Entity<Product>(entity =>
         {
-            entity.HasKey(e => e.Idpro).HasName("PK__Product__98F928594892A613");
+            entity.HasKey(e => e.Idpro).HasName("PK__Product__98F92859886E4C93");
         });
 
         modelBuilder.Entity<ProductVariant>(entity =>
         {
-            entity.HasKey(e => e.Idvariant).HasName("PK__ProductV__C019220C794699B3");
+            entity.HasKey(e => e.Idvariant).HasName("PK__ProductV__C019220CB5D31538");
 
             entity.HasOne(d => d.IdcolorNavigation).WithMany(p => p.ProductVariants)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -135,7 +135,7 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<Size>(entity =>
         {
-            entity.HasKey(e => e.Idsize).HasName("PK__Size__C4E3CC4041A4F278");
+            entity.HasKey(e => e.Idsize).HasName("PK__Size__C4E3CC40738F6746");
         });
 
         OnModelCreatingPartial(modelBuilder);

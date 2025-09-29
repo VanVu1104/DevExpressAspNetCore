@@ -20,8 +20,5 @@ public partial class Product
     public virtual ICollection<ListNpl> ListNpls { get; set; } = new List<ListNpl>();
 
     [InverseProperty("IdproNavigation")]
-    public virtual ICollection<NotePro> NotePros { get; set; } = new List<NotePro>();
-
-    [InverseProperty("IdproNavigation")]
     public virtual ICollection<ProductVariant> ProductVariants { get; set; } = new List<ProductVariant>();
 }

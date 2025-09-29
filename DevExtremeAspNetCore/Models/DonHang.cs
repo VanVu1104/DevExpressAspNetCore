@@ -20,4 +20,7 @@ public partial class DonHang
 
     [InverseProperty("IddhNavigation")]
     public virtual ICollection<Ctdh> Ctdhs { get; set; } = new List<Ctdh>();
+
+    [InverseProperty("IddhNavigation")]
+    public virtual ICollection<NoteDonHang> NoteDonHangs { get; set; } = new List<NoteDonHang>();
 }
