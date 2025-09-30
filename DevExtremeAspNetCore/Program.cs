@@ -1,5 +1,8 @@
 using DevExtremeAspNetCore.Models;
 using DevExtremeAspNetCore.Repository;
+using DevExtremeAspNetCore.Service;
+using DevExtremeAspNetCore.ViewModels;
+using DXWebApplication4.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,7 +14,12 @@ builder.Services
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<IChiTietDonHangRepository, ChiTietDonHangRepository>();
+builder.Services.Configure<FirebaseOptions>(builder.Configuration.GetSection("Firebase"));
+builder.Services.AddSingleton<FirebaseService>();
+builder.Services.AddScoped<IImageService, ImageService>();
 var app = builder.Build();
+
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
