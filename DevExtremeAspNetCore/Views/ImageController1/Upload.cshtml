@@ -1,0 +1,115 @@
+﻿@model List<DevExtremeAspNetCore.ViewModels.ImageUploadViewModel>
+
+@{
+    ViewData["Title"] = "Upload Images";
+}
+
+<h2>Upload nhiều hình ảnh kèm nội dung</h2>
+
+<form asp-action="Upload" asp-controller="Image" method="post" enctype="multipart/form-data">
+    <div id="imageInputs">
+        <div class="image-item">
+            <input type="file" name="items[0].File" onchange="previewImage(this, 0)" />
+            <input type="text" name="items[0].NoiDung" placeholder="Nhập nội dung cho ảnh này" />
+            <br />
+            <img id="preview-0" src="" style="display:none; width:150px; cursor:pointer;" onclick="openPopup(this.src)" />
+        </div>
+    </div>
+
+    <button type="button" onclick="addMore()">Thêm ảnh</button>
+    <button type="submit">Upload</button>
+</form>
+
+@if (ViewBag.Message != null)
+{
+    <p>@ViewBag.Message</p>
+
+    @if (ViewBag.Urls != null)
+    {
+        <ul>
+            @foreach (var url in (List<string>)ViewBag.Urls)
+            {
+                <li>
+                    <img src="@url" width="150" style="cursor:pointer;" onclick="openPopup('@url')" />
+                    <p>@url</p>
+                </li>
+            }
+        </ul>
+    }
+}
+
+<!-- Popup hiển thị ảnh phóng to -->
+<div id="imgPopup" class="popup" onclick="closePopup()">
+    <span class="close">&times;</span>
+    <img class="popup-content" id="popupImage" />
+</div>
+
+<style>
+    .popup {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        padding-top: 60px;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0,0,0,0.8);
+        text-align: center;
+    }
+
+    .popup-content {
+        max-width: 90%;
+        max-height: 80%;
+    }
+
+    .close {
+        position: absolute;
+        top: 20px;
+        right: 40px;
+        color: #fff;
+        font-size: 40px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+</style>
+
+<script>
+    let index = 1;
+
+    function addMore() {
+        const container = document.getElementById("imageInputs");
+        const div = document.createElement("div");
+        div.classList.add("image-item");
+        div.innerHTML = `
+            <input type="file" name="items[${index}].File" onchange="previewImage(this, ${index})" />
+            <input type="text" name="items[${index}].NoiDung" placeholder="Nhập nội dung cho ảnh này" />
+            <br />
+            <img id="preview-${index}" src="" style="display:none; width:150px; cursor:pointer;" onclick="openPopup(this.src)" />
+        `;
+        container.appendChild(div);
+        index++;
+    }
+
+    function previewImage(input, idx) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = document.getElementById(`preview-${idx}`);
+                img.src = e.target.result;
+                img.style.display = "block";
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function openPopup(src) {
+        document.getElementById("popupImage").src = src;
+        document.getElementById("imgPopup").style.display = "block";
+    }
+
+    function closePopup() {
+        document.getElementById("imgPopup").style.display = "none";
+    }
+</script>
