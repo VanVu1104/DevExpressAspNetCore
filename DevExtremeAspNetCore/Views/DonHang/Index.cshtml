@@ -1,71 +1,21 @@
-﻿@model IEnumerable<DevExtremeAspNetCore.ViewModels.DonHangViewModel>
+﻿@using System.Text.Json
+@using DevExtremeAspNetCore.Models
+@using DevExtremeAspNetCore.ViewModels
+@model IEnumerable<DonHangViewModel>
 
 @{
-    ViewBag.Title = "Đơn hàng";
+    ViewBag.Title = "Danh sách đơn hàng";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<link href="~/css/dhlist.css" rel="stylesheet" />
 
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <title>Đơn hàng</title>
-    <link rel="stylesheet" href="~/css/DonHangList.css" asp-append-version="true" />
-    <!-- SweetAlert2 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-</head>
-<body>
-    <div class="donhang-container">
-        <h2>Đơn hàng</h2>
-        <button class="btn btn-add" onclick="openModal('/DonHang/Create', 'Thêm đơn hàng')">Thêm đơn hàng</button>
-        <br /><br />
+<h2>Danh sách đơn hàng</h2>
+<div id="donhangGrid"></div>
 
-        <table id="donhangTable" class="donhang-table">
-            <thead>
-                <tr>
-                    <th rowspan="2">ID</th>
-                    <th rowspan="2">Tên đơn hàng</th>
-                    <th rowspan="2">Ngày đặt</th>
-                    <th rowspan="2">Khách hàng</th>
-                    <th rowspan="2">Product</th>
-                    <th rowspan="2">Color</th>
-                    <th rowspan="2">Ảnh</th>
-                    <th rowspan="2">File</th>
-                    <th colspan="4">Size</th>
-                    <th rowspan="2">Tổng SL</th>
-                    <th rowspan="2">Thao tác</th>
-                </tr>
-                <tr>
-                    <th>S</th>
-                    <th>M</th>
-                    <th>L</th>
-                    <th>XL</th>
-                    @* <th>LRG</th>
-                    <th>XLG</th>
-                    <th>XXL</th> *@
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-        <div class="pagination-wrapper">
-            <div class="pagination-controls">
-                <label for="rowsPerPage">Số dòng:</label>
-                <select id="rowsPerPage" onchange="changeRowsPerPage(this.value)">
-                    <option value="5">5</option>
-                    <option value="10" selected>10</option>
-                    <option value="20">20</option>
-                    <option value="50">50</option>
-                </select>
-            </div>
-
-            <div id="pagination" class="pagination-container"></div>
-        </div>
-
-    </div>
+@section scripts {
     <script>
-        window.contentPath = '/images/';
+        var donHangData = @Html.Raw(JsonSerializer.Serialize(Model));
     </script>
-    <script src="@Url.Content("~/js/DonHangList.js")"></script>
-</body>
-</html>
-
+    <script src="~/js/dhlist.js"></script>
+    <script>$("#Layer_1").click();</script>
+}

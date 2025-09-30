@@ -1,4 +1,5 @@
 using DevExtremeAspNetCore.Models;
+using DevExtremeAspNetCore.Repository;
 using DevExtremeAspNetCore.Service;
 using DevExtremeAspNetCore.Services;
 using DevExtremeAspNetCore.ViewModels;
@@ -13,14 +14,13 @@ builder.Services
     .AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null);
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-
-
+builder.Services.AddScoped<IChiTietDonHangRepository, ChiTietDonHangRepository>();
 builder.Services.Configure<FirebaseOptions>(builder.Configuration.GetSection("Firebase"));
 builder.Services.AddSingleton<FirebaseService>();
-builder.Services.AddScoped<INoteService, NoteService>();
-builder.Services.AddScoped<IImageService, ImageService>();
 
+builder.Services.AddScoped<INoteService, NoteService>();
+
+builder.Services.AddScoped<IImageService, ImageService>();
 var app = builder.Build();
 
 
