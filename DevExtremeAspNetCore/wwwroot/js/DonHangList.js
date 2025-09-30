@@ -44,31 +44,8 @@ function renderDonHangPage() {
             <td>${ngayDat}</td>
             <td>${dh.KhachHang}</td>
             <td>${dh.ProductName}</td>
-            <td>${dh.Color}</td>
-            <td>
-                <button class="btn btn-info btn-sm" onclick='viewImages(${JSON.stringify(dh.Images || [])})'>
-                    Xem ảnh (${dh.Images?.length || 0})
-                </button>
-            </td>
-            <td>
-                <button class="btn btn-secondary btn-sm" onclick='viewFiles(${JSON.stringify(dh.Files || [])})'>
-                    Xem file (${dh.Files?.length || 0})
-                </button>
-            </td>
-            <td>${dh.S}</td>
-            <td>${dh.M}</td>
-            <td>${dh.L}</td>
-            <td>${dh.XL}</td>
-            
+            <td>${dh.Color}</td>            
             <td>${tong}</td>
-            <td>
-                <a class="btn btn-edit" onclick="editDonHang(${dh.IDDH})">
-                    <img src="${window.contentPath}ic_edit.png" alt="Sửa" class="btn-icon">
-                </a>
-                <a class="btn btn-delete" onclick="confirmDelete(${dh.IDDH})">
-                    <img src="${window.contentPath}ic_delete.png" alt="Xóa" class="btn-icon">
-                </a>
-            </td>
         </tr>`;
         tbody.innerHTML += row;
     });

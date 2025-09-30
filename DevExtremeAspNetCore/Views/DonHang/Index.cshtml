@@ -1,71 +1,36 @@
-﻿@model IEnumerable<DevExtremeAspNetCore.ViewModels.DonHangViewModel>
+﻿@using DevExtremeAspNetCore.Models
+@model IEnumerable<DonHangViewModel>
 
 @{
-    ViewBag.Title = "Đơn hàng";
+    ViewBag.Title = "Danh sách đơn hàng";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <title>Đơn hàng</title>
-    <link rel="stylesheet" href="~/css/DonHangList.css" asp-append-version="true" />
-    <!-- SweetAlert2 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-</head>
-<body>
-    <div class="donhang-container">
-        <h2>Đơn hàng</h2>
-        <button class="btn btn-add" onclick="openModal('/DonHang/Create', 'Thêm đơn hàng')">Thêm đơn hàng</button>
-        <br /><br />
+<div style="margin:20px">
+    <h2>Danh sách đơn hàng</h2>
 
-        <table id="donhangTable" class="donhang-table">
-            <thead>
-                <tr>
-                    <th rowspan="2">ID</th>
-                    <th rowspan="2">Tên đơn hàng</th>
-                    <th rowspan="2">Ngày đặt</th>
-                    <th rowspan="2">Khách hàng</th>
-                    <th rowspan="2">Product</th>
-                    <th rowspan="2">Color</th>
-                    <th rowspan="2">Ảnh</th>
-                    <th rowspan="2">File</th>
-                    <th colspan="4">Size</th>
-                    <th rowspan="2">Tổng SL</th>
-                    <th rowspan="2">Thao tác</th>
-                </tr>
-                <tr>
-                    <th>S</th>
-                    <th>M</th>
-                    <th>L</th>
-                    <th>XL</th>
-                    @* <th>LRG</th>
-                    <th>XLG</th>
-                    <th>XXL</th> *@
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-        <div class="pagination-wrapper">
-            <div class="pagination-controls">
-                <label for="rowsPerPage">Số dòng:</label>
-                <select id="rowsPerPage" onchange="changeRowsPerPage(this.value)">
-                    <option value="5">5</option>
-                    <option value="10" selected>10</option>
-                    <option value="20">20</option>
-                    <option value="50">50</option>
-                </select>
-            </div>
-
-            <div id="pagination" class="pagination-container"></div>
-        </div>
-
-    </div>
-    <script>
-        window.contentPath = '/images/';
-    </script>
-    <script src="@Url.Content("~/js/DonHangList.js")"></script>
-</body>
-</html>
-
+    @(Html.DevExtreme().DataGrid<DonHangViewModel>()
+        .ID("donhangGrid")
+        .DataSource(Model)      
+        .KeyExpr("IDDH")  
+        .ShowBorders(true) 
+        .Paging(p => p.PageSize(10))   
+        .FilterRow(f => f.Visible(true))
+        .Columns(columns => {
+            columns.AddFor(m => m.IDDH)
+                   .Caption("Mã đơn hàng");
+            columns.AddFor(m => m.TenKhachHang)
+                    .Caption("Tên đơn hàng");
+            columns.AddFor(m => m.TenKhachHang)
+                   .Caption("Khách hàng");
+            columns.AddFor(m => m.NgayDat)
+                   .Caption("Ngày đặt")
+                   .DataType(GridColumnDataType.Date)
+                   .Format("dd/MM/yyyy");
+            columns.AddFor(m => m.TenSanPham)
+                   .Caption("Sản phẩm");
+            columns.AddFor(m => m.TongSoLuong)
+                   .Caption("Tổng SL");
+        })
+    )
+</div>
