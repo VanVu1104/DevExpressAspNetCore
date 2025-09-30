@@ -7,7 +7,8 @@ using Microsoft.EntityFrameworkCore;
 namespace DevExtremeAspNetCore.Models;
 
 [Table("DonHang")]
-public partial class DonHang
+public partial class DonHangModels
+
 {
     [Key]
     [Column("IDDH")]
@@ -20,4 +21,5 @@ public partial class DonHang
 
     [InverseProperty("IddhNavigation")]
     public virtual ICollection<Ctdh> Ctdhs { get; set; } = new List<Ctdh>();
+
 }
