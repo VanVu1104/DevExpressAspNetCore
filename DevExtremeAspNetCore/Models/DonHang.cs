@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
-using DevExtremeAspNetCore.Models;
 
-namespace DevExtremeAspNetCore.ViewModels;
+namespace DevExtremeAspNetCore.Models;
 
 [Table("DonHang")]
 public partial class DonHang
@@ -21,7 +20,4 @@ public partial class DonHang
 
     [InverseProperty("IddhNavigation")]
     public virtual ICollection<Ctdh> Ctdhs { get; set; } = new List<Ctdh>();
-
-    [InverseProperty("IddhNavigation")]
-    public virtual ICollection<NoteDonHang> NoteDonHangs { get; set; } = new List<NoteDonHang>();
 }

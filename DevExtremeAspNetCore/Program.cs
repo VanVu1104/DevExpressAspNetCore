@@ -1,4 +1,5 @@
 using DevExtremeAspNetCore.Models;
+using DevExtremeAspNetCore.Repository;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,7 +10,7 @@ builder.Services
     .AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null);
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
+builder.Services.AddScoped<IChiTietDonHangRepository, ChiTietDonHangRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

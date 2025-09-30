@@ -6,28 +6,26 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DevExtremeAspNetCore.Models;
 
-[Table("NoteDonHang")]
-public partial class NoteDonHang
+[Table("NoteChiTietDonHang")]
+public partial class NoteChiTietDonHang
 {
     [Key]
     [Column("IDNote")]
     public int Idnote { get; set; }
 
-    [Column("IDDH")]
-    public int Iddh { get; set; }
+    [Column("IDCTDH")]
+    public int Idctdh { get; set; }
 
-    [Column("URLFile")]
     [StringLength(500)]
-    public string Urlfile { get; set; }
+    public string UrlFile { get; set; }
 
-    [Column("URLImage")]
     [StringLength(500)]
-    public string Urlimage { get; set; }
+    public string UrlImage { get; set; }
 
     [StringLength(500)]
     public string NoiDung { get; set; }
 
-    [ForeignKey("Iddh")]
-    [InverseProperty("NoteDonHangs")]
-    public virtual ViewModels.DonHang IddhNavigation { get; set; }
+    [ForeignKey("Idctdh")]
+    [InverseProperty("NoteChiTietDonHangs")]
+    public virtual Ctdh IdctdhNavigation { get; set; }
 }
