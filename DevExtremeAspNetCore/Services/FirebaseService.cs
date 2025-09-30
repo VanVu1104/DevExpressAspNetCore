@@ -1,11 +1,8 @@
-﻿using FirebaseAdmin;
+﻿using DevExtremeAspNetCore.ViewModels;
+using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
-using Google.Apis.Storage.v1.Data;
 using Google.Cloud.Storage.V1;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 
 namespace DXWebApplication4.Services
 {
@@ -14,10 +11,12 @@ namespace DXWebApplication4.Services
         private readonly StorageClient _storageClient;
         private readonly string _bucketName;
 
-        public FirebaseService(string bucketName, string serviceAccountPath)
+        public FirebaseService(IOptions<FirebaseOptions> options)
         {
-            _bucketName = bucketName;
-            var credential = GoogleCredential.FromFile(serviceAccountPath);
+            var firebaseOptions = options.Value;
+
+            _bucketName = firebaseOptions.BucketName;
+            var credential = GoogleCredential.FromFile(firebaseOptions.ServiceAccountPath);
 
             if (FirebaseApp.DefaultInstance == null)
             {
@@ -26,6 +25,7 @@ namespace DXWebApplication4.Services
                     Credential = credential
                 });
             }
+
             _storageClient = StorageClient.Create(credential);
         }
 
@@ -33,6 +33,26 @@ namespace DXWebApplication4.Services
         {
             return $"https://firebasestorage.googleapis.com/v0/b/{_bucketName}/o/{Uri.EscapeDataString(objectName)}?alt=media&token={token}";
         }
+
+        private async Task<string> InternalUploadFileAsync(Stream fileStream, string fileName, string folderPath)
+        {
+            var objectName = $"{folderPath}/{Guid.NewGuid()}_{fileName}";
+            var firebaseToken = Guid.NewGuid().ToString();
+
+            var obj = new Google.Apis.Storage.v1.Data.Object
+            {
+                Bucket = _bucketName,
+                Name = objectName,
+                Metadata = new Dictionary<string, string>
+                {
+                    { "firebaseStorageDownloadTokens", firebaseToken }
+                }
+            };
+
+            await _storageClient.UploadObjectAsync(obj, fileStream);
+            return CreateFirebaseUrl(objectName, firebaseToken);
+        }
+
         public async Task<string> UploadFileAsync(Stream fileStream, string fileName, string folderPath = "images")
         {
             return await InternalUploadFileAsync(fileStream, fileName, folderPath);
@@ -41,25 +61,6 @@ namespace DXWebApplication4.Services
         public async Task<string> UploadFileNoteAsync(Stream fileStream, string fileName, string folderPath = "notes")
         {
             return await InternalUploadFileAsync(fileStream, fileName, folderPath);
-        }
-
-        private async Task<String>InternalUploadFileAsync(Stream fileStream, string fileName, string folderPath)
-        {
-            var objectName = $"{folderPath}/{Guid.NewGuid()}_{fileName}";
-            var firebaseToken = Guid.NewGuid().ToString();
-            var obj = new Google.Apis.Storage.v1.Data.Object
-            {
-                Bucket = _bucketName,
-                Name = objectName,
-                Metadata = new Dictionary<string, string>
-                {
-                    { 
-                        "firebaseStorageDownloadTokens", firebaseToken 
-                    }
-                }
-            };
-            await _storageClient.UploadObjectAsync(obj, fileStream);
-            return CreateFirebaseUrl(objectName, firebaseToken);
         }
     }
 }
