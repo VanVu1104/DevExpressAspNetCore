@@ -1,36 +1,20 @@
-﻿@using DevExtremeAspNetCore.Models
+﻿@using System.Text.Json
+@using DevExtremeAspNetCore.Models
 @model IEnumerable<DonHangViewModel>
 
 @{
     ViewBag.Title = "Danh sách đơn hàng";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<link href="~/css/dhlist.css" rel="stylesheet" />
 
-<div style="margin:20px">
-    <h2>Danh sách đơn hàng</h2>
+<h2>Danh sách đơn hàng</h2>
+<div id="donhangGrid"></div>
 
-    @(Html.DevExtreme().DataGrid<DonHangViewModel>()
-        .ID("donhangGrid")
-        .DataSource(Model)      
-        .KeyExpr("IDDH")  
-        .ShowBorders(true) 
-        .Paging(p => p.PageSize(10))   
-        .FilterRow(f => f.Visible(true))
-        .Columns(columns => {
-            columns.AddFor(m => m.IDDH)
-                   .Caption("Mã đơn hàng");
-            columns.AddFor(m => m.TenKhachHang)
-                    .Caption("Tên đơn hàng");
-            columns.AddFor(m => m.TenKhachHang)
-                   .Caption("Khách hàng");
-            columns.AddFor(m => m.NgayDat)
-                   .Caption("Ngày đặt")
-                   .DataType(GridColumnDataType.Date)
-                   .Format("dd/MM/yyyy");
-            columns.AddFor(m => m.TenSanPham)
-                   .Caption("Sản phẩm");
-            columns.AddFor(m => m.TongSoLuong)
-                   .Caption("Tổng SL");
-        })
-    )
-</div>
+@section scripts {
+    <script>
+        var donHangData = @Html.Raw(JsonSerializer.Serialize(Model));
+    </script>
+    <script src="~/js/dhlist.js"></script>
+    <script>$("#Layer_1").click();</script>
+}
