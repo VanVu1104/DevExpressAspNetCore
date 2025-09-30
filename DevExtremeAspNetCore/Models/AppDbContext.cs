@@ -27,6 +27,8 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<NoteChiTietDonHang> NoteChiTietDonHangs { get; set; }
 
+    public DbSet<NoteChiTietDonHang> NoteChiTietDonHangs { get; set; }
+
     public virtual DbSet<NoteNpl> NoteNpls { get; set; }
 
     public virtual DbSet<Npl> Npls { get; set; }
@@ -115,6 +117,21 @@ public partial class AppDbContext : DbContext
         modelBuilder.Entity<Product>(entity =>
         {
             entity.HasKey(e => e.Idpro).HasName("PK__Product__98F9285982DB1785");
+        });
+        // NoteChiTietDonHang entity configuration
+        modelBuilder.Entity<NoteChiTietDonHang>(entity =>
+        {
+            entity.HasKey(e => e.Idnote).HasName("PK__NoteChiT__E5F1D2E7XXXXXXX");
+
+            entity.Property(e => e.UrlFile).HasMaxLength(500);
+            entity.Property(e => e.UrlImage).HasMaxLength(500);
+            entity.Property(e => e.NoiDung).HasMaxLength(500);
+
+            entity.HasOne(d => d.IdctdhNavigation)
+                .WithMany(p => p.NoteChiTietDonHangs)
+                .HasForeignKey(d => d.Idctdh)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__NoteChiTietDonHang__CTDH");
         });
 
         modelBuilder.Entity<ProductVariant>(entity =>

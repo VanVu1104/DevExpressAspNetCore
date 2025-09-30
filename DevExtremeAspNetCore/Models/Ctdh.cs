@@ -32,6 +32,7 @@ public partial class Ctdh
     [InverseProperty("Ctdhs")]
     public virtual ProductVariant IdvariantNavigation { get; set; }
 
+
     [InverseProperty("IdctdhNavigation")]
     public virtual ICollection<NoteChiTietDonHang> NoteChiTietDonHangs { get; set; } = new List<NoteChiTietDonHang>();
 }

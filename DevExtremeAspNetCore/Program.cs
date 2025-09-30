@@ -1,6 +1,7 @@
 using DevExtremeAspNetCore.Models;
 using DevExtremeAspNetCore.Repository;
 using DevExtremeAspNetCore.Service;
+using DevExtremeAspNetCore.Services;
 using DevExtremeAspNetCore.ViewModels;
 using DXWebApplication4.Services;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<IChiTietDonHangRepository, ChiTietDonHangRepository>();
 builder.Services.Configure<FirebaseOptions>(builder.Configuration.GetSection("Firebase"));
 builder.Services.AddSingleton<FirebaseService>();
+
+builder.Services.AddScoped<INoteService, NoteService>();
+
 builder.Services.AddScoped<IImageService, ImageService>();
 var app = builder.Build();
 
