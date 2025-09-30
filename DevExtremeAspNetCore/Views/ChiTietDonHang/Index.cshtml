@@ -1,0 +1,251 @@
+﻿@model IEnumerable<ChiTietDonHangViewModel>
+
+@{
+    ViewBag.Title = "Đơn hàng";
+    var sizes = ViewBag.Sizes as List<string> ?? new List<string>();
+
+}
+
+<script>
+    window.contentPath = '/images/';
+
+    function editOrder(id) {
+        openModal('/DonHang/Edit/' + id, 'Sửa đơn hàng');
+    }
+
+    function deleteOrder(id) {
+        Swal.fire({
+            title: "Xác nhận xóa?",
+            text: "Bạn có chắc muốn xóa đơn hàng này?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Xóa",
+            cancelButtonText: "Hủy"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // TODO: gọi API xóa đơn hàng
+                Swal.fire("Đã xóa!", "Đơn hàng đã được xóa.", "success");
+            }
+        });
+    }
+    function onCellPrepared(e) {
+    if (e.rowType === "data" || e.rowType === "header") {
+        e.cellElement.css("text-align", "center");
+    }
+}
+</script>
+<style>
+    /* Override DevExtreme theo style cũ */
+
+    .dx-datagrid {
+        font-family: "Roboto", sans-serif;
+        background: #ffffff;
+        box-shadow: none;
+        font-size: 12px;
+    }
+
+    .dx-datagrid .dx-header-row {
+        background-color: #3A6EA5;
+        color: #ffffff;
+        font-size: 12px;
+        line-height: 1;
+        text-align: center;
+    }
+
+    .dx-datagrid .dx-header-row .dx-datagrid-text-content {
+        font-weight: bold;
+    }
+
+    .dx-datagrid .dx-header-row > td {
+        border: 1px solid #000;
+        padding: 6px 8px;
+    }
+
+    .dx-datagrid .dx-data-row > td {
+        border: 1px solid #000;
+        padding: 4px 6px;
+        font-size: 12px;
+        text-align: center;
+        background-color: #ffffff;
+    }
+
+    .dx-datagrid .dx-data-row.dx-state-hover > td {
+        background-color: #f2f2f2;
+    }
+
+    .dx-datagrid .product-img {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+    }
+
+    .dx-datagrid .no-img {
+        font-size: 12px;
+        color: #aaa;
+        font-style: italic;
+    }
+
+    .dx-datagrid .btn {
+        padding: 6px 12px;
+        margin: 0 4px;
+        font-size: 13px;
+        font-weight: 500;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .btn-add {
+        background: #0ABAB5;
+        color: #fff;
+        font-weight: bold;
+    }
+
+    .btn-add:hover {
+        background: #56DFCF;
+        transform: translateY(-2px);
+    }
+
+    .btn-info {
+        background: #ADEED9;
+        color: #004d40;
+    }
+
+    .btn-info:hover {
+        background: #56DFCF;
+        color: #fff;
+        transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+        background: #FFEDF3;
+        color: #8a1253;
+    }
+
+    .btn-secondary:hover {
+        background: #f8c9da;
+        transform: translateY(-2px);
+    }
+
+    .btn-edit:hover {
+        background: #0ABAB5;
+    }
+
+    .btn-delete:hover {
+        background: #f8c9da;
+    }
+
+    .dx-datagrid-pager {
+        margin-top: 20px;
+        text-align: center;
+        font-size: 13px;
+    }
+
+    .dx-datagrid-pager .dx-page {
+        background-color: #3A6EA5;
+        color: white;
+        border: none;
+        margin: 0 3px;
+        padding: 6px 10px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+
+    .dx-datagrid-pager .dx-page.dx-selection {
+        background-color: #0ABAB5;
+        font-weight: bold;
+    }
+
+    .dx-datagrid-pager .dx-page:hover {
+        background-color: #56DFCF;
+    }
+</style>
+<div class="donhang-container">
+    <h2>Đơn hàng</h2>
+    <button class="btn btn-add" onclick="openModal('/DonHang/Create', 'Thêm đơn hàng')">Thêm đơn hàng</button>
+    <br /><br />
+    @(
+        Html.DevExtreme().DataGrid<ChiTietDonHangViewModel>()
+        .ID("donhangGrid")
+        .DataSource(ds => ds.Mvc()
+        .Controller("ChiTietDonHang")
+        .LoadAction("GetAll")
+        .Key("IDCTDH")
+        )
+        .RemoteOperations(true)
+        .ShowBorders(true)
+        .Paging(p => p.PageSize(10))
+        .Pager(pg => pg
+        .ShowPageSizeSelector(true)
+        .AllowedPageSizes(new int[] { 5, 10, 20, 50 })
+        .ShowInfo(true)
+        .Visible(true)
+        .DisplayMode(GridPagerDisplayMode.Full)
+        )
+        .ColumnAutoWidth(true)
+        .ColumnHidingEnabled(true)
+        .Columns(columns =>
+        {
+            columns.AddFor(m => m.TenChiTietDonHang).Caption("Tên đơn hàng");
+            columns.AddFor(m => m.NgayDat).Caption("Ngày đặt").DataType(GridColumnDataType.Date);
+            columns.AddFor(m => m.KhachHang).Caption("Khách hàng");
+            columns.AddFor(m => m.ProductName).Caption("Product");
+            columns.AddFor(m => m.Color).Caption("Color");
+
+            columns.AddFor(m => m.ImageUrl).Caption("Ảnh")
+            .CellTemplate(@<text>
+                               <% if (data.ImageUrl) { %>
+                               <img src="<%- data.ImageUrl %>" class="product-img" />
+                               <% } else { %>
+                               <span class="no-img">No Image</span>
+                               <% } %>
+                           </text>);
+
+            columns.AddFor(m => m.FilePath).Caption("File")
+            .CellTemplate(@<text>
+                               <% if (data.FilePath) { %>
+                               <a href="<%- data.FilePath %>" target="_blank">Download</a>
+                               <% } else { %>
+                               <span class="no-img">No File</span>
+                               <% } %>
+                           </text>);
+
+            columns.Add()
+            .Caption("SIZE")
+            .Alignment(HorizontalAlignment.Center)
+            .Columns(sizeColumns =>
+            {
+                foreach (var size in sizes)
+                {
+                    sizeColumns.Add()
+                .Caption(size)
+                .CellTemplate(@<text>
+                                   <%= (data.SizeQuantities && data.SizeQuantities["@(size)"])
+                                   ? data.SizeQuantities["@(size)"]
+                                   : 0 %>
+                               </text>);
+                }
+            });
+
+            columns.Add().Caption("Thao tác")
+            .CellTemplate(@<text>
+                               <button class="btn btn-info" onclick="editOrder('<%- data.IDCTDH %>')">
+                                   <i class="dx-icon-edit"></i>
+                               </button>
+                               <button class="btn btn-secondary" onclick="deleteOrder('<%- data.IDCTDH %>')">
+                                   <i class="dx-icon-trash"></i>
+                               </button>
+                           </text>);
+        })
+        )
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

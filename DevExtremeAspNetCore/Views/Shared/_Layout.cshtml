@@ -24,13 +24,18 @@
             </button>
             <div id="navbar" class="collapse navbar-collapse">
                 <ul class="navbar-nav me-auto">
-                    <li class="nav-item"><a href="#" class="nav-link active">Home</a></li>
+                    <li class="nav-item"><a asp-controller="Home" asp-action="Index" class="nav-link active">Home</a></li>
                     <li class="nav-item">
-                        <a asp-controller="DonHang" asp-action="Index" class="nav-link">Đơn hàng</a>
+                        <a asp-controller="ChiTietDonHang" asp-action="Index" class="nav-link">Đơn hàng</a>
+                    </li>
+                    <li class="nav-item">
+                        <a asp-controller="ImageController1" asp-action="Upload" class="nav-link">Test Upload Ảnh</a>
                     </li>
                     <li class="nav-item"><a href="#contact" class="nav-link">Contact</a></li>
+
                 </ul>
             </div>
+
         </div>
     </nav>
 

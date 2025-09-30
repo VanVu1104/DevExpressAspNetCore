@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DevExtremeAspNetCore.Models
+namespace DevExtremeAspNetCore.ViewModels
 {
     public class DonHangViewModel
     {
