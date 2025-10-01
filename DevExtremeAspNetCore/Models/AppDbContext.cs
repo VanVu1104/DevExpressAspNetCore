@@ -32,7 +32,7 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<Npl> Npls { get; set; }
 
-    public virtual DbSet<Product> Products { get; set; }
+    public virtual DbSet<ProductModels> Products { get; set; }
 
     public virtual DbSet<ProductVariant> ProductVariants { get; set; }
 
@@ -113,7 +113,7 @@ public partial class AppDbContext : DbContext
             entity.HasKey(e => e.Idnpl).HasName("PK__NPL__945ECD731ACBC4E7");
         });
 
-        modelBuilder.Entity<Product>(entity =>
+        modelBuilder.Entity<ProductModels>(entity =>
         {
             entity.HasKey(e => e.Idpro).HasName("PK__Product__98F9285982DB1785");
         });

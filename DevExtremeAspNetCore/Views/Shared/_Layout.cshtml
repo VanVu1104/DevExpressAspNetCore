@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>DevExtremeAspNetCore</title>
+    <title>Quản lý may mặc</title>
 
     <link href="~/css/devextreme/bootstrap.css" rel="stylesheet" />
     <link href="~/css/devextreme/dx.light.css" rel="stylesheet" />
@@ -16,9 +16,9 @@
 </head>
 
 <body style="padding-top:3.5rem;">
-    <nav class="navbar navbar-dark bg-dark fixed-top navbar-expand-md">
+    <nav class="navbar navbar-dark bg-success fixed-top navbar-expand-md">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/">DevExtremeAspNetCore</a>
+            <a class="navbar-brand" href="/">Quản lý may mặc</a>
             <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -31,11 +31,15 @@
                     <li class="nav-item">
                         <a asp-controller="ImageController1" asp-action="Upload" class="nav-link">Test Upload Ảnh</a>
                     </li>
-                    <li class="nav-item"><a href="#contact" class="nav-link">Contact</a></li>
+                    <li class="nav-item">
+                        <a asp-controller="NPL" asp-action="Index" class="nav-link">Nguyên phụ liệu</a>
+                    </li>
                     <li class="nav-item">
                         <a asp-controller="Note" asp-action="Upload" class="nav-link">Note</a>
                     </li>
-
+                    <li class="nav-item">
+                        <a asp-controller="Product" asp-action="Index" class="nav-link">Sản phẩm</a>
+                    </li>
                 </ul>
             </div>
 

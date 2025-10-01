@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace DevExtremeAspNetCore.Models;
 
 [Table("Product")]
-public partial class Product
+public partial class ProductModels
 {
     [Key]
     [Column("IDPro")]

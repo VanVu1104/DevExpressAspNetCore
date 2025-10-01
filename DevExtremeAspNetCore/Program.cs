@@ -17,7 +17,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<IChiTietDonHangRepository, ChiTietDonHangRepository>();
 builder.Services.Configure<FirebaseOptions>(builder.Configuration.GetSection("Firebase"));
 builder.Services.AddSingleton<FirebaseService>();
-
+builder.Services.AddScoped<INPLRepository, NPLRepository>();
 builder.Services.AddScoped<INoteService, NoteService>();
 
 builder.Services.AddScoped<IImageService, ImageService>();
