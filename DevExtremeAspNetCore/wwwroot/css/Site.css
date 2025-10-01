@@ -1,1 +1,26 @@
-﻿
+﻿/* ====== Navbar ====== */
+.navbar {
+    font-family: "Roboto", sans-serif;
+    font-size: 15px;
+}
+
+/* Mặc định */
+.navbar-nav .nav-link {
+    color: #ffffff !important;
+    padding: 8px 14px;
+    transition: all 0.2s ease-in-out;
+}
+
+    /* Hover */
+    .navbar-nav .nav-link:hover {
+        color: #FFD700 !important;
+        font-weight: 500;
+        text-decoration: underline;
+    }
+
+    /* Active (tự thêm class .active ở server hoặc script) */
+    .navbar-nav .nav-link.active {
+        font-weight: bold;
+        color: #FFD700 !important;
+        border-bottom: 2px solid #FFD700;
+    }
