@@ -1,10 +1,13 @@
-﻿h2{
+﻿body {
+    font-family: Roboto, sans-serif;
+}
+h2{
     text-align:center;
     font-size:24px
 }
 /* ====== HEADER ====== */
 .dx-datagrid-headers .dx-header-row td {
-    background-color: #3A6EA5;
+    background-color: #198754;
     color: #ffffff;
     font-weight: 600;
     text-align: center;
@@ -30,7 +33,7 @@
 
 /* Hover */
 .dx-datagrid-rowsview .dx-data-row:hover td {
-    background-color: #CBDCEB;
+    background-color: #198754;
 }
 
 /* ====== FILTER ROW ====== */
@@ -72,16 +75,16 @@
 
     /* Hover */
     .dx-datagrid .dx-page:hover {
-        background: #0ABAB5;
+        background: #198754;
         color: #fff;
-        border-color: #0ABAB5;
+        border-color: #198754;
     }
 
     /* Trang đang chọn */
     .dx-datagrid .dx-page.dx-selection {
-        background: #0ABAB5;
+        background: #198754;
         color: #fff;
-        border-color: #0ABAB5;
+        border-color: #198754;
         font-weight: bold;
     }
 
@@ -97,8 +100,8 @@
 }
 
     .dx-datagrid .dx-navigate-button:hover {
-        background: #56DFCF;
-        border-color: #56DFCF;
+        background: #198754;
+        border-color: #198754;
         color: #fff;
     }
 
@@ -122,15 +125,15 @@
 }
 
     .dx-datagrid .dx-page-size:hover {
-        border-color: #0ABAB5;
-        background: #ADEED9;
+        border-color: #198754;
+        background: #198754;
         color: #0ABAB5;
     }
 
     /* Page size đang chọn */
     .dx-datagrid .dx-page-size.dx-selection {
-        background: #0ABAB5;
-        border-color: #0ABAB5;
+        background: #198754;
+        border-color: #198754;
         color: #fff;
     }
 /* ==== Label "Số dòng:" ==== */
@@ -193,14 +196,14 @@
 
     #donhangGrid .dx-pager .dx-page:hover,
     #donhangGrid .dx-pager .dx-navigate-button:hover {
-        background: #3A6EA5 !important;
+        background: #198754 !important;
         color: #fff !important;
         border-color: #ffffff !important;
     }
 
 
     #donhangGrid .dx-pager .dx-page.dx-selection {
-        background: #3A6EA5 !important;
+        background: #198754 !important;
         color: #fff !important;
         font-weight: bold;
         border-color: #ffffff !important;

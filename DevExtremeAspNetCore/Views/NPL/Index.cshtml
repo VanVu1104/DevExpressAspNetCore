@@ -1,0 +1,82 @@
+﻿@model IEnumerable<DevExtremeAspNetCore.ViewModels.NPLViewModel>
+@using Newtonsoft.Json
+
+@{
+    ViewBag.Title = "Quản lý NPL";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/css/npl.css" rel="stylesheet" />
+
+<div class="container">
+    @* <button id="btnAddNPL" class="btn btn-primary">Thêm NPL</button> *@
+    <div id="gridContainer" style="margin-top:20px;"></div>
+</div>
+
+<!-- Popup thêm/sửa -->
+<div id="popupNPL" style="display:none;">
+    <form>
+        <div class="mb-2">
+            <label>Tên NPL</label>
+            <input type="text" name="TenNpl" class="form-control" />
+        </div>
+        <div class="mb-2">
+            <label>Màu NPL</label>
+            <input type="text" name="ColorNpl" class="form-control" />
+        </div>
+        <div class="mb-2">
+            <label>Loại</label>
+            <input type="text" name="Loai" class="form-control" />
+        </div>
+        <div class="mb-2">
+            <label>Đơn vị</label>
+            <input type="text" name="DonVi" class="form-control" />
+        </div>
+        <div class="mb-2">
+            <label>Số lượng</label>
+            <input type="number" name="SoLuong" class="form-control" />
+        </div>
+        <div class="mb-2">
+            <label>Vật tư</label>
+            <input type="text" name="VatTu" class="form-control" />
+        </div>
+        <div>
+            <label>Hình ảnh</label>
+            <div id="popupUploader"></div>
+
+            <!-- input ẩn -->
+            <input type="file" id="cameraInput" style="display:none;" accept="image/*" capture="environment" />
+            <input type="file" id="fileInput" style="display:none;" accept="image/*" multiple />
+
+            <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
+                <button type="button" id="btnStartCamera" class="btn btn-outline-secondary">📷 Mở Camera</button>
+                <button type="button" id="btnUploadFile" class="btn btn-outline-primary">📂 Upload ảnh</button>
+                <button type="button" id="btnTakePhoto" class="btn btn-success" style="display:none;">Chụp ảnh</button>
+                <button type="button" id="btnStopCamera" class="btn btn-danger" style="display:none;">Tắt Camera</button>
+            </div>
+
+            <video id="videoCam" autoplay playsinline style="width:100%;max-height:250px;display:none;margin-top:10px;"></video>
+            <canvas id="canvasPhoto" style="display:none;"></canvas>
+            <div id="popupGallery" style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;"></div>
+        </div>
+
+    </form>
+</div>
+@* PopUp Xem ảnh *@
+<div id="popupImageViewer" style="display:none;">
+    <div id="imageList" style="display:flex; flex-wrap:wrap; gap:10px;"></div>
+</div>
+<!-- Popup xem file --> 
+<div id="popupFileViewer" style="display:none;"> 
+    <ul id="fileList" style="list-style:none; padding:0;"></ul> 
+</div>
+@section Scripts {
+    <script src="~/js/npl.js"></script>
+    <script>
+        $(function(){
+            var data = @Html.Raw(JsonConvert.SerializeObject(Model));
+            var token = $('input[name="__RequestVerificationToken"]').val();
+            var uploadUrl = '@Url.Action("UploadImageTemp", "NPL")';
+            NPL.init(data, token, uploadUrl);
+        });
+    </script>
+}
