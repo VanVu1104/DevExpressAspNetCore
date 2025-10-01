@@ -1,0 +1,72 @@
+﻿@model DevExtremeAspNetCore.ViewModels.ProductCreateViewModel
+
+<div class="container mt-4">
+    <h2>Danh sách sản phẩm</h2>
+
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-success">@TempData["Message"]</div>
+    }
+
+    <table class="table table-bordered mb-4">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Tên sản phẩm</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in ViewBag.Products as List<DevExtremeAspNetCore.Models.ProductModels>)
+            {
+                <tr>
+                    <td>@item.Idpro</td>
+                    <td>@item.TenPro</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <h2>Thêm sản phẩm mới</h2>
+
+    <form asp-action="Create" method="post" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label>Tên sản phẩm</label>
+            <input asp-for="TenPro" class="form-control" />
+            <span asp-validation-for="TenPro" class="text-danger"></span>
+        </div>
+
+        <div id="variantContainer">
+            <div class="variant border p-3 mb-3">
+                <h5>Biến thể</h5>
+                <div class="row mb-2">
+                    <div class="col-md-6">
+                        <label>Size</label>
+                        <select name="Variants[0].Idsize" class="form-select">
+                            @foreach (var s in ViewBag.Sizes)
+                            {
+                                <option value="@s.Idsize">@s.TenSize</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Màu</label>
+                        <select name="Variants[0].Idcolor" class="form-select">
+                            @foreach (var c in ViewBag.Colors)
+                            {
+                                <option value="@c.Idcolor">@c.TenColor</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mb-2">
+                    <label>Ảnh</label>
+                    <input type="file" name="Variants[0].Images" multiple class="form-control" />
+                    <input type="text" name="Variants[0].Notes" placeholder="Ghi chú ảnh (cách nhau bằng dấu ,)" class="form-control mt-2" />
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-success">Lưu</button>
+    </form>
+</div>

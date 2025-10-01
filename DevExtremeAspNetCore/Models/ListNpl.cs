@@ -25,5 +25,5 @@ public partial class ListNpl
 
     [ForeignKey("Idpro")]
     [InverseProperty("ListNpls")]
-    public virtual Product IdproNavigation { get; set; }
+    public virtual ProductModels IdproNavigation { get; set; }
 }
