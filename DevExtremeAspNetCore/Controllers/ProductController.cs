@@ -20,12 +20,11 @@ namespace DevExtremeAspNetCore.Controllers
         public IActionResult Index()
         {
             var products = _context.Products.ToList();
-            ViewBag.Products = products; // danh sách để render table
+            ViewBag.Products = products; 
             ViewBag.Sizes = _context.Sizes.ToList();
             ViewBag.Colors = _context.Colors.ToList();
 
             return View(new ProductCreateViewModel());
-            // Model chính của view là form tạo
         }
 
         [HttpPost]
@@ -44,7 +43,7 @@ namespace DevExtremeAspNetCore.Controllers
                 TenPro = model.TenPro,
                 ProductVariants = new List<ProductVariant>()
             };
-
+              
             foreach (var variantVm in model.Variants)
             {
                 var variant = new ProductVariant

@@ -80,5 +80,28 @@ namespace DevExtremeAspNetCore.Controllers
 
             return View("Index", result);
         }
+        public IActionResult Create()
+        {
+            return PartialView("_CreateDonHang");
+        }
+        [HttpPost]
+        public async Task<IActionResult> Create(DonHangCreateViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return PartialView("_CreateDonHang", model);
+            }
+
+            var donHang = new DonHangModels
+            {
+                KhachHang = model.KhachHang,
+                NgayDat = DateOnly.FromDateTime(model.NgayDat)
+            };
+
+            _db.DonHangs.Add(donHang);
+            await _db.SaveChangesAsync();
+
+           return RedirectToAction("Index");
+        }
     }
 }
