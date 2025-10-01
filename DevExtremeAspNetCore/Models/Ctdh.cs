@@ -15,7 +15,8 @@ public partial class Ctdh
 
     [StringLength(250)]
     public string TenChiTietDonHang { get; set; }
-
+    [Column("NgayGiaoHang")]
+    public DateTime NgayGiaoHang { get; set; }
     [Column("IDDH")]
     public int Iddh { get; set; }
 

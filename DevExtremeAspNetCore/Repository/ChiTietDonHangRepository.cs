@@ -36,6 +36,7 @@ namespace DevExtremeAspNetCore.Repository
                 ctdh.TenChiTietDonHang,
                 dh.NgayDat,
                 dh.KhachHang,
+                NgayGiaoHang = ctdh.NgayGiaoHang,
                 ProductName = ctdh.IdvariantNavigation.IdproNavigation.TenPro,
                 Color = ctdh.IdvariantNavigation.IdcolorNavigation.TenColor,
                 Size = ctdh.IdvariantNavigation.IdsizeNavigation.TenSize,
@@ -58,16 +59,18 @@ namespace DevExtremeAspNetCore.Repository
                     x.KhachHang,
                     x.ProductName,
                     x.Color,
+                    x.NgayGiaoHang
                 })
                 .Select(g => new ChiTietDonHangViewModel
                 {
                     IDDH = g.Key.Iddh,
                     TenChiTietDonHang = g.Key.TenChiTietDonHang,
                     NgayDat = g.Key.NgayDat.HasValue
-                        ? g.Key.NgayDat.Value.ToDateTime(TimeOnly.MinValue)
+                        ? g.Key.NgayDat.Value
                         : DateTime.MinValue,
                     KhachHang = g.Key.KhachHang,
                     ProductName = g.Key.ProductName,
+                    NgayGiaoHang = g.Key.NgayGiaoHang,
                     Color = g.Key.Color,
                     Notes = g.SelectMany(x => x.Notes).ToList(),
                     SizeQuantities = g.GroupBy(x => x.Size)

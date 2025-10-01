@@ -1,0 +1,12 @@
+﻿@model int?
+
+<div class="form-group">
+    <label for="IdSize">Size</label>
+    <select id="IdSize" name="IdSize" class="form-control">
+        <option value="">-- Chọn size --</option>
+        @foreach (var s in (List<SelectListItem>)ViewBag.Sizes)
+        {
+            <option value="@s.Value" selected="@(Model == int.Parse(s.Value))">@s.Text</option>
+        }
+    </select>
+</div>

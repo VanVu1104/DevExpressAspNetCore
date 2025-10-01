@@ -9,6 +9,7 @@ namespace DevExtremeAspNetCore.ViewModels
         public int IDDH { get; set; }
         public string TenChiTietDonHang { get; set; }
         public DateTime NgayDat { get; set; }
+        public DateTime NgayGiaoHang { get; set; }
         public string KhachHang { get; set; }
 
         // Thông tin sản phẩm trong đơn hàng
