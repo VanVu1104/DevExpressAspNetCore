@@ -21,6 +21,10 @@ builder.Services.AddSingleton<FirebaseService>();
 builder.Services.AddScoped<INoteService, NoteService>();
 
 builder.Services.AddScoped<IImageService, ImageService>();
+
+builder.Services.AddHttpClient();
+
+
 var app = builder.Build();
 
 
