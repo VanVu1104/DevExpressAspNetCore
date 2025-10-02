@@ -1,171 +1,208 @@
 ﻿@model DevExtremeAspNetCore.ViewModels.ProductCreateViewModel
 
+@{
+    ViewData["Title"] = "Quản lý sản phẩm";
+}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <div class="container mt-4">
-    <h2>Danh sách sản phẩm</h2>
 
     @if (TempData["Message"] != null)
     {
-        <div class="alert alert-success">@TempData["Message"]</div>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["Message"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
     }
 
-    <table class="table table-bordered mb-4">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Tên sản phẩm</th>
-                <th>Ảnh</th>
-                <th>NPL</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in ViewBag.Products as List<DevExtremeAspNetCore.Models.ProductModels>)
-            {
-                <tr>
-                    <td>@item.Idpro</td>
-                    <td>@item.TenPro</td>
-                    <td>
-                        @if (item.ProductVariants != null)
-                        {
-                            foreach (var variant in item.ProductVariants)
-                            {
-                                if (variant.Images != null)
-                                {
-                                    foreach (var img in variant.Images)
-                                    {
-                                        <img src="@img.Url" alt="Ảnh sản phẩm"
-                                             style="width:60px;height:60px;object-fit:cover;margin:2px;cursor:pointer"
-                                             onclick="showImageModal('@img.Url')" />
-                                    }
-                                }
-                            }
-                        }
-                    </td>
-                    <td>
-                        @if (item.ProductVariants != null)
-                        {
-                            foreach (var variant in item.ProductVariants)
-                            {
-                                if (variant.ListNpls != null)
-                                {
-                                    foreach (var npl in variant.ListNpls)
-                                    {
-                                        <span class="badge bg-info m-1">@npl.IdnplNavigation?.TenNpl</span>
-                                    }
-                                }
-                            }
-                        }
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-
-
-    <h2>Thêm sản phẩm mới</h2>
-
-    <form asp-action="Create" method="post" enctype="multipart/form-data">
-        <div class="mb-3">
-            <label>Tên sản phẩm</label>
-            <input asp-for="TenPro" class="form-control" />
-            <span asp-validation-for="TenPro" class="text-danger"></span>
+    <div class="card mb-4">
+        <div class="card-header bg-light">
+            <h5 class="mb-0"><i class="fas fa-file-excel me-2"></i>Import sản phẩm từ Excel</h5>
         </div>
-
-        <div id="variantContainer">
-            <div class="variant border p-3 mb-3">
-                <h5>Biến thể</h5>
-                <div class="row mb-2">
-                    <div class="col-md-6">
-                        <label>Size</label>
-                        <select name="Variants[0].IDSize" class="form-select">
-                            @foreach (var s in ViewBag.Sizes)
-                            {
-                                <option value="@s.Idsize">@s.TenSize</option>
-                            }
-                        </select>
+        <div class="card-body">
+            <form asp-action="ImportExcel" method="post" enctype="multipart/form-data">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <label for="excelFile" class="form-label">Chọn file (.xlsx, .xls)</label>
+                        <input type="file" id="excelFile" name="excelFile" accept=".xlsx,.xls" class="form-control" onchange="previewSingleFile(this, 'excelFilePreview')" />
+                        <div id="excelFilePreview" class="mt-2"></div>
                     </div>
-                    <div class="col-md-6">
-                        <label>Màu</label>
-                        <select name="Variants[0].IDColor" class="form-select">
-                            @foreach (var c in ViewBag.Colors)
-                            {
-                                <option value="@c.Idcolor">@c.TenColor</option>
-                            }
-                        </select>
+                    <div class="col-md-4 mt-3 mt-md-0 text-md-end">
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-upload me-2"></i>Import</button>
                     </div>
                 </div>
+            </form>
+        </div>
+    </div>
 
-                <div class="mb-2">
-                    <label>Ảnh</label>
-                    <input type="file" name="Variants[0].Images" multiple accept="image/*"
-                           class="form-control"
-                           onchange="previewImages(this, 'previewContainer0')" />
-                    <div id="previewContainer0" class="mt-2 d-flex flex-wrap"></div>
-                </div>
-
-                <!-- Thêm phần NPL -->
-                <div class="npl-container mt-3">
-                    <h6>Nguyên phụ liệu</h6>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label>Chọn NPL có sẵn</label>
-                            <select name="Variants[0].NPLs[0].IDNPL" class="form-select">
-                                <option value="">-- Thêm mới --</option>
-                                @foreach (var npl in ViewBag.NPLs)
-                                {
-                                    <option value="@npl.Idnpl">@npl.TenNpl</option>
-                                }
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label>Tên NPL (nếu thêm mới)</label>
-                            <input type="text" name="Variants[0].NPLs[0].TenNPL" class="form-control" />
-                        </div>
-                    </div>
-
-                    <div class="row mt-2">
-                        <div class="col-md-3">
-                            <input type="text" name="Variants[0].NPLs[0].ColorNPL" placeholder="Màu" class="form-control" />
-                        </div>
-                        <div class="col-md-2">
-                            <input type="number" name="Variants[0].NPLs[0].KhoVai" placeholder="Kho vải" class="form-control" />
-                        </div>
-                        <div class="col-md-2">
-                            <input type="text" name="Variants[0].NPLs[0].Loai" placeholder="Loại" class="form-control" />
-                        </div>
-                        <div class="col-md-2">
-                            <input type="text" name="Variants[0].NPLs[0].DonVi" placeholder="Đơn vị" class="form-control" />
-                        </div>
-                        <div class="col-md-3">
-                            <input type="number" name="Variants[0].NPLs[0].SoLuong" placeholder="Số lượng" class="form-control" />
-                        </div>
-                    </div>
-
-                    <div class="mt-2">
-                        <label>File đính kèm</label>
-                        <input type="file" name="Variants[0].NPLs[0].Files" multiple class="form-control" />
-                    </div>
-                    <div class="mt-2">
-                        <label>Ảnh NPL</label>
-                        <input type="file" name="Variants[0].NPLs[0].Images" multiple accept="image/*" class="form-control" />
-                    </div>
-                    <div class="mt-2">
-                        <label>Ghi chú</label>
-                        <textarea name="Variants[0].NPLs[0].NoiDung" class="form-control"></textarea>
-                    </div>
-                </div>
-                <!-- End NPL -->
+    <div class="card mb-4">
+        <div class="card-header bg-light">
+            <h5 class="mb-0"><i class="fas fa-list me-2"></i>Danh sách sản phẩm</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Ảnh</th>
+                            <th>Nguyên phụ liệu</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in ViewBag.Products as List<DevExtremeAspNetCore.Models.ProductModels>)
+                        {
+                            <tr>
+                                <td>@item.Idpro</td>
+                                <td>@item.TenPro</td>
+                                <td>
+                                    @if (item.ProductVariants != null)
+                                    {
+                                        foreach (var variant in item.ProductVariants)
+                                        {
+                                            if (variant.Images != null)
+                                            {
+                                                foreach (var img in variant.Images)
+                                                {
+                                                    <img src="@img.Url" alt="Ảnh sản phẩm"
+                                                         style="width:60px;height:60px;object-fit:cover;margin:2px;cursor:pointer; border-radius: 4px;"
+                                                         onclick="showImageModal('@img.Url')" />
+                                                }
+                                            }
+                                        }
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.ProductVariants != null)
+                                    {
+                                        foreach (var variant in item.ProductVariants)
+                                        {
+                                            if (variant.ListNpls != null)
+                                            {
+                                                foreach (var npl in variant.ListNpls)
+                                                {
+                                                    <span class="badge bg-info m-1">@npl.IdnplNavigation?.TenNpl</span>
+                                                }
+                                            }
+                                        }
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             </div>
         </div>
+    </div>
 
-        <button type="submit" class="btn btn-success">Lưu</button>
-    </form>
+    <div class="card">
+        <div class="card-header bg-light">
+            <h5 class="mb-0"><i class="fas fa-plus-circle me-2"></i>Thêm sản phẩm mới</h5>
+        </div>
+        <div class="card-body">
+            <form asp-action="Create" method="post" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label asp-for="TenPro" class="form-label fw-bold">Tên sản phẩm</label>
+                    <input asp-for="TenPro" class="form-control" />
+                    <span asp-validation-for="TenPro" class="text-danger"></span>
+                </div>
+
+                <div id="variantContainer">
+                    <div class="variant border rounded p-3 mb-3">
+                        <h5 class="mb-3">Biến thể 1</h5>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Size</label>
+                                <select name="Variants[0].IDSize" class="form-select">
+                                    @foreach (var s in ViewBag.Sizes)
+                                    {
+                                        <option value="@s.Idsize">@s.TenSize</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Màu</label>
+                                <select name="Variants[0].IDColor" class="form-select">
+                                    @foreach (var c in ViewBag.Colors)
+                                    {
+                                        <option value="@c.Idcolor">@c.TenColor</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Ảnh biến thể</label>
+                            <input type="file" name="Variants[0].Images" multiple accept="image/*" class="form-control" onchange="previewMultipleImages(this, 'previewContainer0')" />
+                            <div id="previewContainer0" class="mt-2 d-flex flex-wrap gap-2"></div>
+                        </div>
+
+                        <div class="npl-container border rounded p-3 bg-light">
+                            <h6 class="fw-bold mb-3">Nguyên phụ liệu</h6>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Chọn NPL có sẵn</label>
+                                    <select name="Variants[0].NPLs[0].IDNPL" class="form-select">
+                                        <option value="">-- Thêm mới NPL dưới đây --</option>
+                                        @foreach (var npl in ViewBag.NPLs)
+                                        {
+                                            <option value="@npl.Idnpl">@npl.TenNpl</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Tên NPL (nếu thêm mới)</label>
+                                    <input type="text" name="Variants[0].NPLs[0].TenNPL" class="form-control" />
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="text" name="Variants[0].NPLs[0].ColorNPL" placeholder="Màu NPL" class="form-control" />
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="number" name="Variants[0].NPLs[0].KhoVai" placeholder="Khổ vải" class="form-control" />
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="text" name="Variants[0].NPLs[0].Loai" placeholder="Loại" class="form-control" />
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="text" name="Variants[0].NPLs[0].DonVi" placeholder="Đơn vị" class="form-control" />
+                                </div>
+                                <div class="col-md-12">
+                                    <input type="number" name="Variants[0].NPLs[0].SoLuong" placeholder="Số lượng" class="form-control" />
+                                </div>
+                            </div>
+
+                            <div class="mt-3">
+                                <label class="form-label">File đính kèm NPL</label>
+                                <input type="file" name="Variants[0].NPLs[0].Files" multiple class="form-control" onchange="previewMultipleFiles(this, 'nplFilesPreview_0_0')" />
+                                <div id="nplFilesPreview_0_0" class="mt-2 d-flex flex-wrap gap-2"></div>
+                            </div>
+
+                            <div class="mt-3">
+                                <label class="form-label">Ảnh NPL</label>
+                                <input type="file" name="Variants[0].NPLs[0].Images" multiple accept="image/*" class="form-control" onchange="previewMultipleImages(this, 'nplImagesPreview_0_0')" />
+                                <div id="nplImagesPreview_0_0" class="mt-2 d-flex flex-wrap gap-2"></div>
+                            </div>
+
+                            <div class="mt-3">
+                                <label class="form-label">Ghi chú</label>
+                                <textarea name="Variants[0].NPLs[0].NoiDung" class="form-control" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-success"><i class="fas fa-save me-2"></i>Lưu sản phẩm</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 
-<!-- Modal phóng to ảnh -->
 <div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
-            <div class="modal-body text-center">
+            <div class="modal-body text-center p-0">
                 <img id="modalImage" src="" class="img-fluid" />
             </div>
         </div>
@@ -173,57 +210,137 @@
 </div>
 
 @section Scripts {
-    <script>
-        function previewImages(input, previewContainerId) {
-            const container = document.getElementById(previewContainerId);
-            container.innerHTML = "";
-            const dt = new DataTransfer();
-
-            Array.from(input.files).forEach(file => {
-                if (file.type.startsWith("image/")) {
-                    const reader = new FileReader();
-                    reader.onload = e => {
-                        const wrapper = document.createElement("div");
-                        wrapper.className = "position-relative m-1 d-inline-block";
-
-                        const img = document.createElement("img");
-                        img.src = e.target.result;
-                        img.className = "border";
-                        img.style.width = "100px";
-                        img.style.height = "100px";
-                        img.style.objectFit = "cover";
-                        img.style.cursor = "pointer";
-
-                        img.onclick = () => showImageModal(e.target.result);
-
-                        const removeBtn = document.createElement("span");
-                        removeBtn.innerHTML = "&times;";
-                        removeBtn.className = "position-absolute top-0 end-0 bg-danger text-white rounded-circle";
-                        removeBtn.style.cursor = "pointer";
-                        removeBtn.style.padding = "0 6px";
-                        removeBtn.onclick = () => {
-                            wrapper.remove();
-                            const newDt = new DataTransfer();
-                            Array.from(dt.files).forEach(f => {
-                                if (f !== file) newDt.items.add(f);
-                            });
-                            input.files = newDt.files;
-                        };
-
-                        wrapper.appendChild(img);
-                        wrapper.appendChild(removeBtn);
-                        container.appendChild(wrapper);
-                    };
-                    reader.readAsDataURL(file);
-                    dt.items.add(file);
-                }
-            });
-            input.files = dt.files;
+    <style>
+        .preview-item {
+            position: relative;
+            display: inline-block;
         }
 
+            .preview-item .remove-btn {
+                position: absolute;
+                top: -5px;
+                right: -5px;
+                width: 20px;
+                height: 20px;
+                background-color: rgba(255, 0, 0, 0.8);
+                color: white;
+                border-radius: 50%;
+                text-align: center;
+                line-height: 18px;
+                font-size: 14px;
+                cursor: pointer;
+                border: 1px solid white;
+                transition: background-color 0.2s;
+            }
+
+                .preview-item .remove-btn:hover {
+                    background-color: red;
+                }
+
+        .file-badge .remove-btn {
+            cursor: pointer;
+            margin-left: 5px;
+            font-weight: bold;
+        }
+
+    </style>
+
+    <script>
+        // Hàm cập nhật lại danh sách file trong một input
+        function updateFileList(input, files) {
+            const dataTransfer = new DataTransfer();
+            files.forEach(file => dataTransfer.items.add(file));
+            input.files = dataTransfer.files;
+        }
+
+        // Hàm xem trước cho nhiều ảnh
+        function previewMultipleImages(input, previewContainerId) {
+            const container = document.getElementById(previewContainerId);
+            container.innerHTML = "";
+            const files = Array.from(input.files);
+
+            files.forEach((file, index) => {
+                if (!file.type.startsWith("image/")) return;
+
+                const reader = new FileReader();
+                reader.onload = e => {
+                    const wrapper = document.createElement("div");
+                    wrapper.className = "preview-item";
+
+                    const img = document.createElement("img");
+                    img.src = e.target.result;
+                    img.style.width = "100px";
+                    img.style.height = "100px";
+                    img.style.objectFit = "cover";
+                    img.style.border = "1px solid #ddd";
+                    img.style.borderRadius = "4px";
+                    img.style.cursor = "pointer";
+                    img.onclick = () => showImageModal(e.target.result);
+
+                    const removeBtn = document.createElement("span");
+                    removeBtn.innerHTML = "&times;";
+                    removeBtn.className = "remove-btn";
+                    removeBtn.title = "Xóa ảnh này";
+                    removeBtn.onclick = (event) => {
+                        event.stopPropagation();
+                        files.splice(index, 1); // Xóa file khỏi mảng
+                        updateFileList(input, files); // Cập nhật lại input
+                        previewMultipleImages(input, previewContainerId); // Vẽ lại preview
+                    };
+
+                    wrapper.appendChild(img);
+                    wrapper.appendChild(removeBtn);
+                    container.appendChild(wrapper);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // Hàm xem trước cho nhiều file (hiển thị tên file)
+        function previewMultipleFiles(input, previewContainerId) {
+            const container = document.getElementById(previewContainerId);
+            container.innerHTML = "";
+            const files = Array.from(input.files);
+
+            files.forEach((file, index) => {
+                const badge = document.createElement("span");
+                badge.className = "badge bg-secondary file-badge";
+                badge.innerHTML = `${file.name} <span class="remove-btn text-danger" title="Xóa file này">&times;</span>`;
+
+                badge.querySelector('.remove-btn').onclick = () => {
+                    files.splice(index, 1); // Xóa file khỏi mảng
+                    updateFileList(input, files); // Cập nhật lại input
+                    previewMultipleFiles(input, previewContainerId); // Vẽ lại preview
+                };
+
+                container.appendChild(badge);
+            });
+        }
+
+        // Hàm xem trước cho 1 file duy nhất (Excel)
+        function previewSingleFile(input, previewContainerId) {
+             const container = document.getElementById(previewContainerId);
+             container.innerHTML = "";
+             if (input.files.length > 0) {
+                 const file = input.files[0];
+                 const badge = document.createElement("span");
+                 badge.className = "badge bg-success file-badge";
+                 badge.innerHTML = `${file.name} <span class="remove-btn text-white" title="Xóa file này">&times;</span>`;
+
+                 badge.querySelector('.remove-btn').onclick = () => {
+                     input.value = ""; // Cách đơn giản nhất để xóa file duy nhất
+                     container.innerHTML = "";
+                 };
+
+                 container.appendChild(badge);
+             }
+        }
+
+        // Hàm hiển thị modal ảnh
         function showImageModal(url) {
             document.getElementById("modalImage").src = url;
-            new bootstrap.Modal(document.getElementById("imageModal")).show();
+            const imageModal = new bootstrap.Modal(document.getElementById("imageModal"));
+            imageModal.show();
         }
     </script>
 }

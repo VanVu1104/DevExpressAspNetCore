@@ -17,10 +17,10 @@ public partial class ProductVariant
     public int Idpro { get; set; }
 
     [Column("IDSize")]
-    public int Idsize { get; set; }
+    public int? Idsize { get; set; }
 
     [Column("IDColor")]
-    public int Idcolor { get; set; }
+    public int? Idcolor { get; set; }
 
     [ForeignKey("Idcolor")]
     [InverseProperty("ProductVariants")]
