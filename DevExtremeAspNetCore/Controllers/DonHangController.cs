@@ -44,9 +44,6 @@ namespace DevExtremeAspNetCore.Controllers
             .ToList();
             return View(result);
         }
-
-
-
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -91,7 +88,7 @@ namespace DevExtremeAspNetCore.Controllers
             var donHang = new DonHangModels
             {
                 KhachHang = model.KhachHang,
-                NgayDat = DateOnly.FromDateTime(model.NgayDat)
+                NgayDat = model.NgayDat
             };
             _db.DonHangs.Add(donHang);
             await _db.SaveChangesAsync();
