@@ -52,3 +52,32 @@
         }
     }
 }).dxDataGrid("instance");
+$(document).on("submit", "#formCreateDonHang", function (e) {
+    e.preventDefault(); // ngăn submit form bình thường
+
+    var form = $(this);
+
+    $.ajax({
+        url: form.attr("action"),
+        type: form.attr("method"),
+        data: form.serialize(),
+        success: function (res) {
+            if (res.success) {
+                // Đóng modal
+                var modalEl = document.getElementById('createDonHangModal');
+                var modal = bootstrap.Modal.getInstance(modalEl);
+                modal.hide();
+
+                // Reload danh sách
+                location.reload();
+            } else {
+                // Nếu validation fail, render lại form
+                $("#createDonHangBody").html(res);
+            }
+        },
+        error: function () {
+            alert("Có lỗi xảy ra khi lưu đơn hàng!");
+        }
+    });
+});
+

@@ -9,7 +9,27 @@
 }
 <link href="~/css/dhlist.css" rel="stylesheet" />
 <h2>Danh sách đơn hàng</h2>
+<div class="mb-3">
+    <button id="btnCreateDonHang" class="btn btn-success">
+        <i class="fas fa-plus"></i> Tạo đơn hàng
+    </button>
+</div>
 <div id="donhangGrid"></div>
+<!-- Modal Create Đơn Hàng -->
+<div class="modal fade" id="createDonHangModal" tabindex="-1" aria-labelledby="createDonHangLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createDonHangLabel">Tạo đơn hàng mới</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+            </div>
+            <div class="modal-body" id="createDonHangBody">
+                <!-- Nội dung form sẽ load bằng Ajax -->
+                <div class="text-center">Đang tải...</div>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section scripts {
     <script>
@@ -17,4 +37,17 @@
     </script>
     <script src="~/js/dhlist.js"></script>
     <script>$("#Layer_1").click();</script>
+    <script>
+            $("#btnCreateDonHang").on("click", function () {
+            $("#createDonHangBody").html("<div class='text-center'>Đang tải...</div>");
+
+            $.get("/DonHang/Create", function (data) {
+                $("#createDonHangBody").html(data);
+                var modal = new bootstrap.Modal(document.getElementById('createDonHangModal'));
+                modal.show();
+            });
+        });
+
+    </script>
+
 }

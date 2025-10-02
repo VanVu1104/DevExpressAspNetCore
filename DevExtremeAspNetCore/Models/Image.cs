@@ -23,6 +23,7 @@ public partial class Image
     [StringLength(500)]
     public string NoiDung { get; set; }
 
+
     [ForeignKey("Idvariant")]
     [InverseProperty("Images")]
     public virtual ProductVariant IdvariantNavigation { get; set; }

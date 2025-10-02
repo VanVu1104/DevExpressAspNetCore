@@ -1,0 +1,13 @@
+﻿@model DevExtremeAspNetCore.Models.DonHangModels
+
+<form id="formCreateDonHang" method="post" asp-controller="DonHang" asp-action="Create">
+    <div class="mb-3">
+        <label>Khách hàng</label>
+        <input asp-for="KhachHang" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label>Ngày đặt</label>
+        <input asp-for="NgayDat" type="date" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Lưu</button>
+</form>
