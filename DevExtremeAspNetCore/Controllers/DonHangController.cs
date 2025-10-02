@@ -95,6 +95,25 @@ namespace DevExtremeAspNetCore.Controllers
 
            return RedirectToAction("Index");
         }
+		[HttpPut("{id}")]
+		public async Task<IActionResult> UpdateDonHang(int id, [FromBody] DonHangModels donHang)
+		{
+			if (id != donHang.Iddh) return BadRequest();
 
-    }
+			_db.Entry(donHang).State = EntityState.Modified;
+			await _db.SaveChangesAsync();
+			return Ok(donHang);
+		}
+
+		[HttpDelete("{id}")]
+		public async Task<IActionResult> DeleteDonHang(int id)
+		{
+			var donHang = await _db.DonHangs.FindAsync(id);
+
+			if (donHang == null) return NotFound();
+			_db.DonHangs.Remove(donHang);
+			await _db.SaveChangesAsync();
+			return Ok(new { message = "Đã xóa đơn hàng." });
+		}
+	}
 }
