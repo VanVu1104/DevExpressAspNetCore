@@ -1,0 +1,11 @@
+﻿@model int?
+
+<div class="form-group">
+    <select id="IdColor" name="IdColor" class="form-control">
+        <option value="">-- Chọn màu sắc --</option>
+        @foreach (var s in (List<SelectListItem>)ViewBag.Colors)
+        {
+            <option value="@s.Value" selected="@(Model == int.Parse(s.Value))">@s.Text</option>
+        }
+    </select>
+</div>

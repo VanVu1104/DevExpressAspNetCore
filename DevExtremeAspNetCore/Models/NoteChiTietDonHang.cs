@@ -25,7 +25,6 @@ public partial class NoteChiTietDonHang
     [StringLength(500)]
     public string NoiDung { get; set; }
 
-  
     [ForeignKey("Idctdh")]
     [InverseProperty("NoteChiTietDonHangs")]
     public virtual Ctdh IdctdhNavigation { get; set; }

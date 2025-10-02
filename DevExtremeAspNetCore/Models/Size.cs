@@ -16,6 +16,12 @@ public partial class Size
     [StringLength(50)]
     public string TenSize { get; set; }
 
+    [InverseProperty("IdcolorNavigation")]
+    public virtual ICollection<Ctdh> Ctdhs { get; set; } = new List<Ctdh>();
+
+    [InverseProperty("IdsizeNavigation")]
+    public virtual ICollection<Ctdh> Ctdhs { get; set; } = new List<Ctdh>();
+
     [InverseProperty("IdsizeNavigation")]
     public virtual ICollection<ProductVariant> ProductVariants { get; set; } = new List<ProductVariant>();
 }

@@ -21,7 +21,6 @@ namespace DevExtremeAspNetCore.Controllers
         {
             var donHangs = await _db.DonHangs
                 .Include(dh => dh.Ctdhs)
-                    .ThenInclude(ct => ct.IdvariantNavigation)
                         .ThenInclude(v => v.IdproNavigation)
                 .ToListAsync();
 
@@ -30,7 +29,7 @@ namespace DevExtremeAspNetCore.Controllers
                 dh.Iddh,
                 dh.KhachHang,
                 dh.NgayDat,
-                TenSanPham = ctdh.IdvariantNavigation.IdproNavigation.TenPro,
+                TenSanPham = ctdh.IdproNavigation.TenPro,
                 SoLuong = ctdh.SoLuong ?? 0
             })
             .GroupBy(x => new { x.Iddh, x.KhachHang, x.NgayDat, x.TenSanPham })
@@ -38,16 +37,14 @@ namespace DevExtremeAspNetCore.Controllers
             {
                 IDDH = g.Key.Iddh,
                 TenKhachHang = g.Key.KhachHang,
-                NgayDat = g.Key.NgayDat.HasValue
-                    ? g.Key.NgayDat.Value.ToDateTime(TimeOnly.MinValue)
-                    : DateTime.MinValue,
+                NgayDat = g.Key.NgayDat,
                 TenSanPham = g.Key.TenSanPham,
                 TongSoLuong = g.Sum(x => x.SoLuong)
             })
             .ToList();
-
             return View(result);
         }
+
 
 
         [HttpGet]
@@ -55,7 +52,6 @@ namespace DevExtremeAspNetCore.Controllers
         {
             var donHangs = await _db.DonHangs
                 .Include(dh => dh.Ctdhs)
-                    .ThenInclude(ct => ct.IdvariantNavigation)
                         .ThenInclude(v => v.IdproNavigation)
                 .ToListAsync();
 
@@ -64,7 +60,7 @@ namespace DevExtremeAspNetCore.Controllers
                 dh.Iddh,
                 dh.KhachHang,
                 dh.NgayDat,
-                TenSanPham = ctdh.IdvariantNavigation.IdproNavigation.TenPro,
+                TenSanPham = ctdh.IdproNavigation.TenPro,
                 SoLuong = ctdh.SoLuong ?? 0
             })
             .GroupBy(x => new { x.Iddh, x.KhachHang, x.NgayDat, x.TenSanPham })
@@ -72,14 +68,14 @@ namespace DevExtremeAspNetCore.Controllers
             {
                 IDDH = g.Key.Iddh,
                 TenKhachHang = g.Key.KhachHang,
-                NgayDat = g.Key.NgayDat.HasValue ? g.Key.NgayDat.Value.ToDateTime(TimeOnly.MinValue) : DateTime.MinValue,
+                NgayDat = g.Key.NgayDat,
                 TenSanPham = g.Key.TenSanPham,
                 TongSoLuong = g.Sum(x => x.SoLuong)
             })
             .ToList();
-
             return View("Index", result);
         }
+
         public IActionResult Create()
         {
             return PartialView("_CreateDonHang");
@@ -102,5 +98,6 @@ namespace DevExtremeAspNetCore.Controllers
 
            return RedirectToAction("Index");
         }
+
     }
 }

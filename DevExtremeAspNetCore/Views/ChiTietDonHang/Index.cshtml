@@ -3,9 +3,8 @@
 @{
     ViewBag.Title = "Đơn hàng";
     var sizes = ViewBag.Sizes as List<string> ?? new List<string>();
-
 }
-
+<link href="~/css/ctdh.css" rel="stylesheet" />
 <script>
     window.contentPath = '/images/';
 
@@ -34,146 +33,28 @@
     }
 }
 </script>
-<style>
-    /* Override DevExtreme theo style cũ */
+<script src="~/js/modal.js"></script>
+<div id="formModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 id="modalTitle"></h4>
+            <span class="close" onclick="closeModal()">&times;</span>
+        </div>
+        <div class="modal-body" id="modalBody">
+            <!-- nội dung form load bằng AJAX -->
+        </div>
+    </div>
+</div>
 
-    .dx-datagrid {
-        font-family: "Roboto", sans-serif;
-        background: #ffffff;
-        box-shadow: none;
-        font-size: 12px;
-    }
-
-    .dx-datagrid .dx-header-row {
-        background-color: #3A6EA5;
-        color: #ffffff;
-        font-size: 12px;
-        line-height: 1;
-        text-align: center;
-    }
-
-    .dx-datagrid .dx-header-row .dx-datagrid-text-content {
-        font-weight: bold;
-    }
-
-    .dx-datagrid .dx-header-row > td {
-        border: 1px solid #000;
-        padding: 6px 8px;
-    }
-
-    .dx-datagrid .dx-data-row > td {
-        border: 1px solid #000;
-        padding: 4px 6px;
-        font-size: 12px;
-        text-align: center;
-        background-color: #ffffff;
-    }
-
-    .dx-datagrid .dx-data-row.dx-state-hover > td {
-        background-color: #f2f2f2;
-    }
-
-    .dx-datagrid .product-img {
-        width: 50px;
-        height: 50px;
-        object-fit: cover;
-        border-radius: 8px;
-        border: 1px solid #ddd;
-    }
-
-    .dx-datagrid .no-img {
-        font-size: 12px;
-        color: #aaa;
-        font-style: italic;
-    }
-
-    .dx-datagrid .btn {
-        padding: 6px 12px;
-        margin: 0 4px;
-        font-size: 13px;
-        font-weight: 500;
-        border-radius: 6px;
-        border: none;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .btn-add {
-        background: #0ABAB5;
-        color: #fff;
-        font-weight: bold;
-    }
-
-    .btn-add:hover {
-        background: #56DFCF;
-        transform: translateY(-2px);
-    }
-
-    .btn-info {
-        background: #ADEED9;
-        color: #004d40;
-    }
-
-    .btn-info:hover {
-        background: #56DFCF;
-        color: #fff;
-        transform: translateY(-2px);
-    }
-
-    .btn-secondary {
-        background: #FFEDF3;
-        color: #8a1253;
-    }
-
-    .btn-secondary:hover {
-        background: #f8c9da;
-        transform: translateY(-2px);
-    }
-
-    .btn-edit:hover {
-        background: #0ABAB5;
-    }
-
-    .btn-delete:hover {
-        background: #f8c9da;
-    }
-
-    .dx-datagrid-pager {
-        margin-top: 20px;
-        text-align: center;
-        font-size: 13px;
-    }
-
-    .dx-datagrid-pager .dx-page {
-        background-color: #3A6EA5;
-        color: white;
-        border: none;
-        margin: 0 3px;
-        padding: 6px 10px;
-        border-radius: 4px;
-        cursor: pointer;
-        transition: background 0.3s;
-    }
-
-    .dx-datagrid-pager .dx-page.dx-selection {
-        background-color: #0ABAB5;
-        font-weight: bold;
-    }
-
-    .dx-datagrid-pager .dx-page:hover {
-        background-color: #56DFCF;
-    }
-</style>
 <div class="donhang-container">
-    <h2>Đơn hàng</h2>
-    <button class="btn btn-add" onclick="openModal('/DonHang/Create', 'Thêm đơn hàng')">Thêm đơn hàng</button>
+    <h2>Chi tiết đơn hàng</h2>
+    <button class="btn btn-add" onclick="openModal('/ChiTietDonHang/Create', 'Thêm chi tiết đơn hàng')">
+        Thêm mới
+    </button>
     <br /><br />
     @(
         Html.DevExtreme().DataGrid<ChiTietDonHangViewModel>()
-        .ID("donhangGrid")
+        .ID("chiTietDonHangGrid")
         .DataSource(ds => ds.Mvc()
         .Controller("ChiTietDonHang")
         .LoadAction("GetAll")
@@ -198,6 +79,7 @@
             columns.AddFor(m => m.KhachHang).Caption("Khách hàng");
             columns.AddFor(m => m.ProductName).Caption("Product");
             columns.AddFor(m => m.Color).Caption("Color");
+            columns.AddFor(m => m.NgayGiaoHang).Caption("Ngày Giao Hàng").DataType(GridColumnDataType.Date);
 
             columns.AddFor(m => m.ImageUrl).Caption("Ảnh")
             .CellTemplate(@<text>
@@ -243,9 +125,10 @@
                                    <i class="dx-icon-trash"></i>
                                </button>
                            </text>);
-        })
+        }).OnCellPrepared("onCellPrepared")
         )
 
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
