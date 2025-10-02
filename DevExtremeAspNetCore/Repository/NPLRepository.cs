@@ -1,5 +1,6 @@
 ﻿using DevExtremeAspNetCore.Models;
 using DevExtremeAspNetCore.ViewModels;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Drawing;
 
@@ -119,5 +120,31 @@ namespace DevExtremeAspNetCore.Repository
             await _db.SaveChangesAsync();
         }
 
+        public async Task<List<string>> GetColorsAsync(string term = "")
+        {
+            return await _db.Npls
+                .Where(x => !string.IsNullOrEmpty(x.ColorNpl) && x.ColorNpl.Contains(term))
+                .Select(x => x.ColorNpl)
+                .Distinct()
+                .ToListAsync();
+        }
+
+        public async Task<List<string>> GetUnitsAsync()
+        {
+            return await _db.Npls
+                .Where(x => !string.IsNullOrEmpty(x.DonVi))
+                .Select(x => x.DonVi)
+                .Distinct()
+                .ToListAsync();
+        }
+
+        public async Task<List<string>> GetTypesAsync()
+        {
+            return await _db.Npls
+                .Where(x => !string.IsNullOrEmpty(x.Loai))
+                .Select(x => x.Loai)
+                .Distinct()
+                .ToListAsync();
+        }
     }
 }

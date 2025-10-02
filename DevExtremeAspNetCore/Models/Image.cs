@@ -20,7 +20,6 @@ public partial class Image
     [Column("IDVariant")]
     public int Idvariant { get; set; }
 
-
     [StringLength(500)]
     public string NoiDung { get; set; }
 

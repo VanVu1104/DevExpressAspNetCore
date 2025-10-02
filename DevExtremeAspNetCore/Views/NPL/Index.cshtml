@@ -6,6 +6,8 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <link href="~/css/npl.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css" />
+
 
 <div class="container">
     <div id="gridContainer" style="margin-top:20px;"></div>
@@ -14,51 +16,58 @@
 <!-- Popup thêm/sửa -->
 <div id="popupNPL" style="display:none;">
     <form>
-        <div class="mb-2">
-            <label>Tên nguyên phụ liệu</label>
-            <input type="text" name="TenNpl" class="form-control" />
+        <div class="form-npl">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Tên nguyên phụ liệu</label>
+                    <input type="text" name="TenNpl" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label>Màu</label>
+                    <div id="ColorNpl"></div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Loại</label>
+                    <div id="Loai"></div>
+                </div>
+                <div class="form-group">
+                    <label>Đơn vị</label>
+                    <div id="DonVi"></div>
+                </div>
+                <div class="form-group">
+                    <label>Số lượng</label>
+                    <input type="number" name="SoLuong" class="form-control" min="0" required />
+                </div>
+            </div>
         </div>
-        <div class="mb-2">
-            <label>Màu</label>
-            <input type="text" name="ColorNpl" class="form-control" />
-        </div>
-        <div class="mb-2">
-            <label>Loại</label>
-            <input type="text" name="Loai" class="form-control" />
-        </div>
-        <div class="mb-2">
-            <label>Đơn vị</label>
-            <input type="text" name="DonVi" class="form-control" />
-        </div>
-        <div class="mb-2">
-            <label>Số lượng</label>
-            <input type="number" name="SoLuong" class="form-control" min="0" required />
-        </div>
-        <div class="mb-2">
-            <label>Vật tư</label>
-            <input type="text" name="VatTu" class="form-control" />
-        </div>
-        <div>
-            <label>Hình ảnh</label>
-            <div id="popupUploader"></div>
 
-            <!-- input ẩn -->
+        <div class="image-uploader-card">
+            <label class="section-label">📸 Hình ảnh</label>
+
+            <!-- Input ẩn -->
             <input type="file" id="cameraInput" style="display:none;" accept="image/*" capture="environment" />
             <input type="file" id="fileInput" style="display:none;" accept="image/*" multiple />
 
-            <div class="mb-2">
-                <div style="margin-bottom:10px; display:flex; gap:10px;">
-                    <button type="button" id="btnOpenCamera" class="btn btn-secondary">📷 Mở Camera</button>
-                    <button type="button" id="btnUploadImage" class="btn btn-info">📂 Upload ảnh</button>
-                    <button type="button" id="btnCapture" class="btn btn-success" style="display:none;">Chụp ảnh</button>
-                    <button type="button" id="btnCloseCamera" class="btn btn-danger" style="display:none;">Đóng camera</button>
-                </div>
-
-                <video id="videoCam" autoplay playsinline style="width:100%; max-height:250px; display:none; border:1px solid #ccc; border-radius:6px;"></video>
-                <canvas id="canvasPhoto" style="display:none;"></canvas>
-                <div id="imagePreview" style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;"></div>
+            <div class="button-group">
+                <button type="button" id="btnOpenCamera" class="btn btn-camera">Mở Camera</button>
+                <button type="button" id="btnUploadImage" class="btn btn-upload">Upload ảnh</button>
+                <button type="button" id="btnCapture" class="btn btn-capture" style="display:none;">Chụp ảnh</button>
+                <button type="button" id="btnCloseCamera" class="btn btn-close" style="display:none;">Đóng Camera</button>
             </div>
-       </div>
+
+            <video id="videoCam" autoplay playsinline class="video-cam"></video>
+            <canvas id="canvasPhoto" style="display:none;"></canvas>
+
+            <div id="imagePreview" class="preview-container"></div>
+        </div>
+
+        <div class="file-uploader-card">
+            <label class="section-label">📂 Chọn file</label>
+            <input type="file" name="FilesNPL" id="FilesNPL" multiple />
+            <div id="filePreview" class="preview-container"></div>
+        </div>
 
     </form>
 </div>
@@ -74,6 +83,7 @@
 </div>
 @section Scripts {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
     <script src="~/js/npl.js"></script>
     <script>
         $(function(){
