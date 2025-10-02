@@ -13,7 +13,7 @@ public partial class DonHang
     [Column("IDDH")]
     public int Iddh { get; set; }
 
-    public DateTime? NgayDat { get; set; }
+    public DateTime NgayDat { get; set; }
 
     [StringLength(255)]
     public string KhachHang { get; set; }

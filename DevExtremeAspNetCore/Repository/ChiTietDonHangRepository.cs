@@ -15,17 +15,11 @@ namespace DevExtremeAspNetCore.Repository
         {
             var donHangs = await _db.DonHangs
                 .Include(dh => dh.Ctdhs)
-                    .ThenInclude(ct => ct.IdvariantNavigation)
-                        .ThenInclude(v => v.IdproNavigation)
+                    .ThenInclude(ct => ct.IdproNavigation)
                 .Include(dh => dh.Ctdhs)
-                    .ThenInclude(ct => ct.IdvariantNavigation)
-                        .ThenInclude(v => v.IdcolorNavigation)
+                    .ThenInclude(ct => ct.IdsizeNavigation)
                 .Include(dh => dh.Ctdhs)
-                    .ThenInclude(ct => ct.IdvariantNavigation)
-                        .ThenInclude(v => v.IdsizeNavigation)
-                .Include(dh => dh.Ctdhs)
-                    .ThenInclude(ct => ct.IdvariantNavigation)
-                        .ThenInclude(v => v.Images)
+                    .ThenInclude(ct => ct.IdcolorNavigation)
                 .Include(dh => dh.Ctdhs)
                     .ThenInclude(ct => ct.NoteChiTietDonHangs)
                 .ToListAsync();
@@ -37,9 +31,9 @@ namespace DevExtremeAspNetCore.Repository
                 dh.NgayDat,
                 dh.KhachHang,
                 NgayGiaoHang = ctdh.NgayGiaoHang,
-                ProductName = ctdh.IdvariantNavigation.IdproNavigation.TenPro,
-                Color = ctdh.IdvariantNavigation.IdcolorNavigation.TenColor,
-                Size = ctdh.IdvariantNavigation.IdsizeNavigation.TenSize,
+                ProductName = ctdh.IdproNavigation.TenPro,
+                Color = ctdh.IdcolorNavigation.TenColor,
+                Size = ctdh.IdsizeNavigation.TenSize,
                 SoLuong = ctdh.SoLuong,
                 Notes = ctdh.NoteChiTietDonHangs
                     .Select(n => new NoteChiTietDonHangViewModel
@@ -65,9 +59,7 @@ namespace DevExtremeAspNetCore.Repository
                 {
                     IDDH = g.Key.Iddh,
                     TenChiTietDonHang = g.Key.TenChiTietDonHang,
-                    NgayDat = g.Key.NgayDat.HasValue
-                        ? g.Key.NgayDat.Value
-                        : DateTime.MinValue,
+                    NgayDat = g.Key.NgayDat,
                     KhachHang = g.Key.KhachHang,
                     ProductName = g.Key.ProductName,
                     NgayGiaoHang = g.Key.NgayGiaoHang,

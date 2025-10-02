@@ -5,8 +5,8 @@ namespace DevExtremeAspNetCore.Repository
 {
     public interface IProductRepository
     {
-        Task<List<ProductDTO>> GetAll();
-        Task<List<ColorDto>> GetColorsByProduct(int idPro);
-        Task<List<SizeDto>> GetSizesByProductAndColor(int idPro, int idColor);
+        Task<List<ProductDTO>> GetProducts();
+        Task<List<ColorDto>> GetColors();
+        Task<List<SizeDto>> GetSizes();
     }
 }

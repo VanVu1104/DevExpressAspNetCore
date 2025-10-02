@@ -4,28 +4,29 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace DevExtremeAspNetCore.ViewComponents
 {
-    public class SizeSelectViewComponent : ViewComponent
+    public class ColorSelectViewComponent : ViewComponent
     {
         private readonly AppDbContext _context;
 
-        public SizeSelectViewComponent(AppDbContext context)
+        public ColorSelectViewComponent(AppDbContext context)
         {
             _context = context;
         }
-        //Load danh sách size
+
         public IViewComponentResult Invoke(int? selectedId = null)
         {
-            var sizes = _context.Sizes
+            var colors = _context.Colors
                 .Select(p => new SelectListItem
                 {
-                    Value = p.Idsize.ToString(),
-                    Text = p.TenSize
+                    Value = p.Idcolor.ToString(),
+                    Text = p.TenColor
                 })
                 .ToList();
 
-            ViewBag.Sizes = sizes;
+            ViewBag.Colors = colors;
 
             return View(selectedId);
         }
     }
+
 }

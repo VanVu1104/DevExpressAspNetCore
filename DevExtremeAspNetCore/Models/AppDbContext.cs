@@ -41,7 +41,6 @@ public partial class AppDbContext : DbContext
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=QLMayMac;Trusted_Connection=True;TrustServerCertificate=True;");
 
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Color>(entity =>
@@ -53,13 +52,15 @@ public partial class AppDbContext : DbContext
         {
             entity.HasKey(e => e.Idctdh).HasName("PK__CTDH__0F87803D8E91CC5D");
 
+            entity.HasOne(d => d.IdcolorNavigation).WithMany(p => p.Ctdhs).HasConstraintName("FK_CTDH_Color");
+
             entity.HasOne(d => d.IddhNavigation).WithMany(p => p.Ctdhs)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__CTDH__IDDH__33D4B598");
 
-            entity.HasOne(d => d.IdvariantNavigation).WithMany(p => p.Ctdhs)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__CTDH__IDVariant__34C8D9D1");
+            entity.HasOne(d => d.IdproNavigation).WithMany(p => p.Ctdhs).HasConstraintName("FK_CTDH_Product");
+
+            entity.HasOne(d => d.IdsizeNavigation).WithMany(p => p.Ctdhs).HasConstraintName("FK_CTDH_Size");
         });
 
         modelBuilder.Entity<DonHang>(entity =>
@@ -80,13 +81,15 @@ public partial class AppDbContext : DbContext
         {
             entity.HasKey(e => e.Idlist).HasName("PK__ListNPL__F5D88C0DBA2934FC");
 
+            entity.Property(e => e.Idvariant).HasDefaultValue(1);
+
             entity.HasOne(d => d.IdnplNavigation).WithMany(p => p.ListNpls)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__ListNPL__IDNPL__3D5E1FD2");
 
-            entity.HasOne(d => d.IdproNavigation).WithMany(p => p.ListNpls)
+            entity.HasOne(d => d.IdvariantNavigation).WithMany(p => p.ListNpls)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__ListNPL__IDPro__3C69FB99");
+                .HasConstraintName("FK_ListNPL_ProductVariant");
         });
 
         modelBuilder.Entity<NoteChiTietDonHang>(entity =>

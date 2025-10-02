@@ -27,21 +27,24 @@
 
     <!-- Color -->
     <div class="form-group">
-        <label for="IdColor">Màu sắc <span class="text-danger">*</span></label>
-        <select asp-for="IdColor" class="form-control" id="colorSelect" disabled required>
-            <option value="">-- Chọn màu --</option>
-        </select>
+        <label>Màu sắc <span class="text-danger">*</span></label>
+        @await Component.InvokeAsync("ColorSelect")
         <span class="text-danger" id="ColorError"></span>
     </div>
 
     <!-- Size -->
-    <div class="form-group">
-        <label for="sizesContainer">Size (không bắt buộc)</label>
-        <div id="sizesContainer">
-            <!-- Sẽ được load động bằng JS -->
-        </div>
-        <span class="text-danger" id="SizeError"></span>
+    <div id="sizesContainer">
+        @foreach (var size in (List<SizeDto>)ViewBag.Sizes)
+        {
+            <div class="form-group d-flex align-items-center">
+                <label class="mr-2">@size.Name</label>
+                <input type="number" class="form-control w-25"
+                       data-size-id="@size.Id"
+                       min="0" value="0" />
+            </div>
+        }
     </div>
+
     <!-- Upload Image -->
     <div class="form-group">
         <label for="imageUpload">Tải lên hình ảnh</label>

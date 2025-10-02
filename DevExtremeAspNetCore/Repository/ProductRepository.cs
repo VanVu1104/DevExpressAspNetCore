@@ -12,7 +12,7 @@ namespace DevExtremeAspNetCore.Repository
         {
             _context = context;
         }
-        public async Task<List<ProductDTO>> GetAll()
+        public async Task<List<ProductDTO>> GetProducts()
         {
             return await _context.Products
                 .Select(p => new ProductDTO
@@ -23,27 +23,25 @@ namespace DevExtremeAspNetCore.Repository
                 .ToListAsync();
         }
 
-        public async Task<List<ColorDto>> GetColorsByProduct(int idPro)
+        public async Task<List<ColorDto>> GetColors()
         {
-            return await _context.ProductVariants
-                .Where(v => v.Idpro == idPro)
+            return await _context.Colors
                 .Select(v => new ColorDto
                 {
                     Id = v.Idcolor,
-                    Name = v.IdcolorNavigation.TenColor
+                    Name = v.TenColor
                 })
                 .Distinct()
                 .ToListAsync();
         }
 
-        public async Task<List<SizeDto>> GetSizesByProductAndColor(int idPro, int idColor)
+        public async Task<List<SizeDto>> GetSizes()
         {
-            return await _context.ProductVariants
-                .Where(v => v.Idpro == idPro && v.Idcolor == idColor)
+            return await _context.Sizes
                 .Select(v => new SizeDto
                 {
-                    VariantId = v.Idvariant,
-                    Name = v.IdsizeNavigation.TenSize
+                    Id = v.Idsize,
+                    Name = v.TenSize
                 })
                 .ToListAsync();
         }

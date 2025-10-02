@@ -22,9 +22,6 @@ public partial class ProductVariant
     [Column("IDColor")]
     public int Idcolor { get; set; }
 
-    [InverseProperty("IdvariantNavigation")]
-    public virtual ICollection<Ctdh> Ctdhs { get; set; } = new List<Ctdh>();
-
     [ForeignKey("Idcolor")]
     [InverseProperty("ProductVariants")]
     public virtual Color IdcolorNavigation { get; set; }
@@ -39,4 +36,7 @@ public partial class ProductVariant
 
     [InverseProperty("IdvariantNavigation")]
     public virtual ICollection<Image> Images { get; set; } = new List<Image>();
+
+    [InverseProperty("IdvariantNavigation")]
+    public virtual ICollection<ListNpl> ListNpls { get; set; } = new List<ListNpl>();
 }

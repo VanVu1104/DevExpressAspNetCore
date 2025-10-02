@@ -1,110 +1,93 @@
 ﻿function openModal(url, title) {
     $("#modalTitle").text(title);
-
-    // load partial view (_Create) từ server
-    $("#modalBody").load(url, function () {
-        $("#formModal").show();
-    });
+    // load partial view (_Create) từ server 
+    $("#modalBody").load(url, function () { $("#formModal").show(); });
 }
-
 function closeModal() {
     $("#formModal").hide();
     $("#modalBody").empty();
 }
-
-// Sau khi submit form thành công
+// Sau khi submit form thành công 
 function onFormSuccess() {
     closeModal();
     $("#donhangGrid").dxDataGrid("instance").refresh();
-    DevExpress.ui.notify({
-        message: "Đơn hàng đã được lưu thành công!",
-        type: "success",
-        displayTime: 2500,
-        position: {
-            my: "top center",
-            at: "top center"
-        }
-    });
+    DevExpress.ui.notify(
+        {
+            message: "Đơn hàng đã được lưu thành công!", type: "success", displayTime: 2500,
+            position: { my: "top center", at: "top center" }
+        });
 }
-
-// Hàm xóa tất cả error messages
+// Hàm xóa tất cả error messages 
 function clearErrors() {
     $(".text-danger[id$='Error']").text("");
     $(".form-control").removeClass("is-invalid");
 }
-
-// Hàm hiển thị error cho một field
+// Hàm hiển thị error cho một field 
 function showError(fieldId, message) {
     $("#" + fieldId + "Error").text(message);
     $("#" + fieldId).addClass("is-invalid");
 }
-
-// Hàm validate form
+// Hàm validate form 
 function validateForm() {
     clearErrors();
     var isValid = true;
-
-    // Validate Tên đơn hàng
+    // Validate Tên đơn hàng 
     var tenChiTietDonHang = $("#TenChiTietDonHang").val().trim();
     if (!tenChiTietDonHang) {
-        showError("TenChiTietDonHang", "Vui lòng nhập tên");
-        isValid = false;
+        showError("TenChiTietDonHang", "Vui lòng nhập tên"); isValid = false;
     }
-
-    // Validate Ngày đặt
+    // Validate Ngày giao hàng
     var NgayGiaoHang = $("#NgayGiaoHang").val();
-    if (!NgayGiaoHang) {
-        showError("NgayGiaoHang", "Vui lòng chọn ngày đặt");
+    if (!ngayGiaoHang) {
+        showError("NgayGiaoHang", "Vui lòng chọn ngày giao hàng");
         isValid = false;
-    }
+    } else {
+        // Chuyển string thành Date object
+        var today = new Date();
+        today.setHours(0, 0, 0, 0); // reset giờ về 00:00 để so sánh chính xác
+        var selectedDate = new Date(ngayGiaoHang);
 
-    // Validate Product
+        if (selectedDate < today) {
+            showError("NgayGiaoHang", "Ngày giao hàng phải lớn hơn hoặc bằng ngày hiện tại");
+            isValid = false;
+        }
+    }
+    // Validate Product 
     var productId = $("#IdProduct").val();
     if (!productId) {
-        showError("Product", "Vui lòng chọn sản phẩm");
-        isValid = false;
+        showError("Product", "Vui lòng chọn sản phẩm"); isValid = false;
     }
-
-    // Validate Color
-    var colorId = $("#colorSelect").val();
+    // Validate Color 
+    var colorId = $("#IdColor").val();
     if (!colorId) {
-        showError("Color", "Vui lòng chọn màu sắc");
-        isValid = false;
+        showError("Color", "Vui lòng chọn màu sắc"); isValid = false;
     }
-
     return isValid;
 }
-
-// Hàm lưu chi tiết đơn hàng
+// Hàm lưu chi tiết đơn hàng 
 $(document).on("submit", "#orderForm", function (e) {
     e.preventDefault();
-
-    // Validate form trước khi submit
-    if (!validateForm()) {
-        return;
-    }
-
-    var orderId = 3; // test
+    // Validate form trước khi submit 
+    if (!validateForm()) { return; }
+    var orderId = 3;
+    // test 
     var productId = parseInt($("#IdProduct").val());
-    var colorId = parseInt($("#colorSelect").val());
+    var colorId = parseInt($("#IdColor").val());
     var TenChiTietDonHang = $("#TenChiTietDonHang").val().trim();
     var NgayGiaoHang = $("#NgayGiaoHang").val();
-
     var sizes = [];
     $("#sizesContainer input[type='number']").each(function () {
         var qty = parseInt($(this).val()) || 0;
-        var variantId = parseInt($(this).data("variant-id") || $(this).attr("name").match(/\[(.*?)\]/)[1]);
-
+        var sizeId = parseInt($(this).data("size-id") ||
+            $(this).attr("name").match(/\[(.*?)\]/)[1]);
         if (qty > 0) {
             sizes.push({
-                IdProductVariant: variantId,
+                IdSize: sizeId,
                 SoLuong: qty
             });
         }
     });
-
-    // Size không bắt buộc, cho phép sizes.length === 0
-
+    // Size không bắt buộc, cho phép sizes.length === 0 
     var dto = {
         IdDonHang: orderId,
         TenChiTietDonHang: TenChiTietDonHang,
@@ -113,91 +96,24 @@ $(document).on("submit", "#orderForm", function (e) {
         IdColor: colorId,
         Sizes: sizes
     };
-
     console.log(dto);
 
-    $.ajax({
-        url: "/ChiTietDonHang/CreateMultiple",
-        type: "POST",
-        contentType: "application/json",
-        data: JSON.stringify(dto),
-        success: function (res) {
-            if (res.success) {
-                onFormSuccess();
-            } else {
-                alert(res.message || "Có lỗi xảy ra khi lưu!");
+    $.ajax(
+        {
+            url: "/ChiTietDonHang/CreateMultiple", type: "POST", contentType: "application/json", data: JSON.stringify(dto),
+            success: function (res) {
+                if (res.success) {
+                    onFormSuccess();
+                } else {
+                    alert(res.message || "Có lỗi xảy ra khi lưu!");
+                }
+            },
+            error: function (xhr) {
+                console.error(xhr.responseText);
+                alert("Lỗi khi gọi API!");
             }
-        },
-        error: function (xhr) {
-            console.error(xhr.responseText);
-            alert("Lỗi khi gọi API!");
-        }
-    });
-});
-
-// Khi chọn Product → load màu sắc
-$(document).on("change", "#IdProduct", function () {
-    var productId = $(this).val();
-    var $colorSelect = $("#colorSelect");
-    var $sizeContainer = $("#sizesContainer");
-
-    // Clear error khi user thay đổi
-    $("#ProductError").text("");
-    $("#IdProduct").removeClass("is-invalid");
-
-    // Reset color + size khi đổi product
-    $colorSelect.empty().append('<option value="">-- Chọn màu --</option>');
-    $colorSelect.prop("disabled", true);
-    $sizeContainer.empty();
-
-    if (!productId) return;
-
-    $.get("/ChiTietDonHang/GetColorsByProduct/" + productId, function (data) {
-        if (data.length === 0) {
-            $colorSelect.append('<option value="">(Không có màu)</option>');
-            return;
-        }
-
-        data.forEach(function (c) {
-            $colorSelect.append(`<option value="${c.Id}">${c.Name}</option>`);
         });
-        $colorSelect.prop("disabled", false);
-    });
 });
-
-// Khi chọn Color → load size
-$(document).on("change", "#colorSelect", function () {
-    var productId = $("#IdProduct").val();
-    var colorId = $(this).val();
-    var $container = $("#sizesContainer");
-
-    // Clear error khi user thay đổi
-    $("#ColorError").text("");
-    $("#colorSelect").removeClass("is-invalid");
-
-    $container.empty();
-
-    if (!productId || !colorId) return;
-
-    $.get("/ChiTietDonHang/GetSizesByProductAndColor/" + productId + "/" + colorId, function (data) {
-        if (data.length === 0) {
-            $container.append("<p>Không có size nào</p>");
-            return;
-        }
-
-        data.forEach(function (s) {
-            $container.append(`
-                <div class="form-group d-flex align-items-center mb-2">
-                    <label class="me-2" style="width: 60px;">${s.Name}</label>
-                    <input type="number" name="SizeQuantities[${s.VariantId}]" 
-                           class="form-control" min="0" value="0" style="width:100px;" />
-                </div>
-            `);
-        });
-    });
-});
-
 $(document).on("change", "#NgayDat", function () {
-    $("#NgayDatError").text("");
-    $(this).removeClass("is-invalid");
+    $("#NgayDatError").text(""); $(this).removeClass("is-invalid");
 });

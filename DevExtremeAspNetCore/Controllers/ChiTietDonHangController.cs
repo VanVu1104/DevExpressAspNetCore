@@ -45,32 +45,29 @@ namespace DevExtremeAspNetCore.Controllers
         [HttpGet("GetAllProduct")]
         public async Task<IActionResult> GetAllProduct()
         {
-            var products = await _productRepository.GetAll();
+            var products = await _productRepository.GetProducts();
             return Ok(products);
         }
 
-        [HttpGet("GetColorsByProduct/{idPro}")]
-        public async Task<IActionResult> GetColorsByProduct(int idPro)
+        [HttpGet("GetColors")]
+        public async Task<IActionResult> GetColors()
         {
-            var colors = await _productRepository.GetColorsByProduct(idPro);
+            var colors = await _productRepository.GetColors();
             return Ok(colors);
         }
 
-        [HttpGet("GetSizesByProductAndColor/{idPro}/{idColor}")]
-        public async Task<IActionResult> GetSizesByProductAndColor(int idPro, int idColor)
+        [HttpGet("GetSizes")]
+        public async Task<IActionResult> GetSizes()
         {
-            var sizes = await _productRepository.GetSizesByProductAndColor(idPro, idColor);
+            var sizes = await _productRepository.GetSizes();
             return Ok(sizes);
         }
         [HttpGet("Create")]
         public async Task<IActionResult> Create()
         {
-            var products = await _productRepository.GetAll();
-            ViewBag.Products = products;
-
-            // Load size từ repo (nếu cần dùng mặc định)
-            var sizes = await _chiTietDonHangRepository.GetAllSize();
-            ViewBag.Sizes = sizes;
+            ViewBag.Products = await _productRepository.GetProducts();
+            ViewBag.Colors = await _productRepository.GetColors();
+            ViewBag.Sizes = await _productRepository.GetSizes();
 
             return PartialView("_Create");
         }
@@ -85,10 +82,13 @@ namespace DevExtremeAspNetCore.Controllers
                 {
                     TenChiTietDonHang = dto.TenChiTietDonHang,
                     NgayGiaoHang = dto.NgayGiaoHang,
-                    Iddh = dto.IdDonHang,   // mặc định 3 để test
-                    Idvariant = s.IdProductVariant,
+                    Iddh = dto.IdDonHang,
+                    Idpro = dto.IdProduct,
+                    Idcolor = dto.IdColor,  
+                    Idsize = s.IdSize,
                     SoLuong = s.SoLuong
                 };
+
                 _db.Ctdhs.Add(ctdh);
             }
 
