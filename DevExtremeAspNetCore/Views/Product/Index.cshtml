@@ -13,6 +13,7 @@
             <tr>
                 <th>ID</th>
                 <th>Tên sản phẩm</th>
+                <th>Ảnh</th>
             </tr>
         </thead>
         <tbody>
@@ -21,10 +22,28 @@
                 <tr>
                     <td>@item.Idpro</td>
                     <td>@item.TenPro</td>
+                    <td>
+                        @if (item.ProductVariants != null)
+                        {
+                            foreach (var variant in item.ProductVariants)
+                            {
+                                if (variant.Images != null)
+                                {
+                                    foreach (var img in variant.Images)
+                                    {
+                                        <img src="@img.Url" alt="Ảnh sản phẩm"
+                                             style="width:60px;height:60px;object-fit:cover;margin:2px;cursor:pointer"
+                                             onclick="showImageModal('@img.Url')" />
+                                    }
+                                }
+                            }
+                        }
+                    </td>
                 </tr>
             }
         </tbody>
     </table>
+
 
     <h2>Thêm sản phẩm mới</h2>
 
@@ -61,8 +80,10 @@
 
                 <div class="mb-2">
                     <label>Ảnh</label>
-                    <input type="file" name="Variants[0].Images" multiple class="form-control" />
-                    <input type="text" name="Variants[0].Notes" placeholder="Ghi chú ảnh (cách nhau bằng dấu ,)" class="form-control mt-2" />
+                    <input type="file" name="Variants[0].Images" multiple accept="image/*"
+                           class="form-control"
+                           onchange="previewImages(this, 'previewContainer0')" />
+                    <div id="previewContainer0" class="mt-2 d-flex flex-wrap"></div>
                 </div>
             </div>
         </div>
@@ -70,3 +91,78 @@
         <button type="submit" class="btn btn-success">Lưu</button>
     </form>
 </div>
+
+<!-- Modal phóng to ảnh -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-body text-center">
+                <img id="modalImage" src="" class="img-fluid" />
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function previewImages(input, previewContainerId) {
+            const container = document.getElementById(previewContainerId);
+            container.innerHTML = ""; 
+
+            const dt = new DataTransfer(); 
+
+            Array.from(input.files).forEach(file => {
+                if (file.type.startsWith("image/")) {
+                    const reader = new FileReader();
+                    reader.onload = e => {
+
+                        const wrapper = document.createElement("div");
+                        wrapper.className = "position-relative m-1 d-inline-block";
+
+                        const img = document.createElement("img");
+                        img.src = e.target.result;
+                        img.className = "border";
+                        img.style.width = "100px";
+                        img.style.height = "100px";
+                        img.style.objectFit = "cover";
+                        img.style.cursor = "pointer";
+
+                        img.onclick = () => showImageModal(e.target.result);
+
+
+                        const removeBtn = document.createElement("span");
+                        removeBtn.innerHTML = "&times;";
+                        removeBtn.className = "position-absolute top-0 end-0 bg-danger text-white rounded-circle";
+                        removeBtn.style.cursor = "pointer";
+                        removeBtn.style.padding = "0 6px";
+                        removeBtn.onclick = () => {
+                            wrapper.remove();
+
+                            const newDt = new DataTransfer();
+                            Array.from(dt.files).forEach(f => {
+                                if (f !== file) newDt.items.add(f);
+                            });
+                            input.files = newDt.files;
+                        };
+
+                        wrapper.appendChild(img);
+                        wrapper.appendChild(removeBtn);
+                        container.appendChild(wrapper);
+                    };
+                    reader.readAsDataURL(file);
+
+
+                    dt.items.add(file);
+                }
+            });
+
+
+            input.files = dt.files;
+        }
+
+        function showImageModal(url) {
+            document.getElementById("modalImage").src = url;
+            new bootstrap.Modal(document.getElementById("imageModal")).show();
+        }
+    </script>
+}

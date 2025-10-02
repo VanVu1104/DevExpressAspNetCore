@@ -2,6 +2,7 @@
 using DevExtremeAspNetCore.ViewModels;
 using DXWebApplication4.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace DevExtremeAspNetCore.Controllers
 {
@@ -19,8 +20,12 @@ namespace DevExtremeAspNetCore.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            var products = _context.Products.ToList();
-            ViewBag.Products = products; 
+            var products = _context.Products
+                .Include(p => p.ProductVariants)
+                    .ThenInclude(v => v.Images)
+                .ToList();
+
+            ViewBag.Products = products;
             ViewBag.Sizes = _context.Sizes.ToList();
             ViewBag.Colors = _context.Colors.ToList();
 

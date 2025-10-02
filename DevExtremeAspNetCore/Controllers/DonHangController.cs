@@ -97,7 +97,6 @@ namespace DevExtremeAspNetCore.Controllers
                 KhachHang = model.KhachHang,
                 NgayDat = DateOnly.FromDateTime(model.NgayDat)
             };
-
             _db.DonHangs.Add(donHang);
             await _db.SaveChangesAsync();
 
