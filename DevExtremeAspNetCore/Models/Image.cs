@@ -20,9 +20,11 @@ public partial class Image
     [Column("IDVariant")]
     public int Idvariant { get; set; }
 
+    [Column("FileType")]
+    public string FileType { get; set; }
+
     [StringLength(500)]
     public string NoiDung { get; set; }
-
 
     [ForeignKey("Idvariant")]
     [InverseProperty("Images")]
