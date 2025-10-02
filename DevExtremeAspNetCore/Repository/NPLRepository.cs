@@ -33,7 +33,7 @@ namespace DevExtremeAspNetCore.Repository
                 Images = _db.ListNpls
                             .Where(l => l.Idnpl == n.Idnpl)
                             .Join(_db.ProductVariants,
-                                  l => l.Idpro,
+                                  l => l.Idvariant,
                                   v => v.Idpro,
                                   (l, v) => v.Idvariant)
                             .Join(_db.Images,

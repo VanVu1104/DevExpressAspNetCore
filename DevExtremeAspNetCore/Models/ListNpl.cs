@@ -13,17 +13,18 @@ public partial class ListNpl
     [Column("IDList")]
     public int Idlist { get; set; }
 
-    [Column("IDPro")]
-    public int Idpro { get; set; }
-
     [Column("IDNPL")]
     public int Idnpl { get; set; }
+
+    [Column("IDVariant")]
+    public int Idvariant { get; set; }
 
     [ForeignKey("Idnpl")]
     [InverseProperty("ListNpls")]
     public virtual Npl IdnplNavigation { get; set; }
 
-    [ForeignKey("Idpro")]
+    [ForeignKey("Idvariant")]
     [InverseProperty("ListNpls")]
-    public virtual ProductModels IdproNavigation { get; set; }
+    public virtual ProductVariant IdvariantNavigation { get; set; }
+
 }

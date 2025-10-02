@@ -17,5 +17,8 @@ public partial class Color
     public string TenColor { get; set; }
 
     [InverseProperty("IdcolorNavigation")]
+    public virtual ICollection<Ctdh> Ctdhs { get; set; } = new List<Ctdh>();
+
+    [InverseProperty("IdcolorNavigation")]
     public virtual ICollection<ProductVariant> ProductVariants { get; set; } = new List<ProductVariant>();
 }

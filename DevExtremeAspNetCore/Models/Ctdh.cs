@@ -19,18 +19,35 @@ public partial class Ctdh
     [Column("IDDH")]
     public int Iddh { get; set; }
 
-    [Column("IDVariant")]
-    public int Idvariant { get; set; }
-
     public int? SoLuong { get; set; }
+
+    [Column(TypeName = "datetime")]
+    public DateTime NgayGiaoHang { get; set; }
+
+    [Column("IDPro")]
+    public int? Idpro { get; set; }
+
+    [Column("IDColor")]
+    public int? Idcolor { get; set; }
+
+    [Column("IDSize")]
+    public int? Idsize { get; set; }
+
+    [ForeignKey("Idcolor")]
+    [InverseProperty("Ctdhs")]
+    public virtual Color IdcolorNavigation { get; set; }
 
     [ForeignKey("Iddh")]
     [InverseProperty("Ctdhs")]
     public virtual DonHangModels IddhNavigation { get; set; }
 
-    [ForeignKey("Idvariant")]
+    [ForeignKey("Idpro")]
     [InverseProperty("Ctdhs")]
-    public virtual ProductVariant IdvariantNavigation { get; set; }
+    public virtual ProductModels IdproNavigation { get; set; }
+
+    [ForeignKey("Idsize")]
+    [InverseProperty("Ctdhs")]
+    public virtual Size IdsizeNavigation { get; set; }
 
 
     [InverseProperty("IdctdhNavigation")]

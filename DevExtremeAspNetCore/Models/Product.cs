@@ -17,7 +17,7 @@ public partial class ProductModels
     public string TenPro { get; set; }
 
     [InverseProperty("IdproNavigation")]
-    public virtual ICollection<ListNpl> ListNpls { get; set; } = new List<ListNpl>();
+    public virtual ICollection<Ctdh> Ctdhs { get; set; } = new List<Ctdh>();
 
     [InverseProperty("IdproNavigation")]
     public virtual ICollection<ProductVariant> ProductVariants { get; set; } = new List<ProductVariant>();

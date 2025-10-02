@@ -1,0 +1,77 @@
+﻿@model ChiTietDonHangCreateViewModel
+@{
+    Layout = null;
+}
+
+<form asp-action="Create" asp-controller="DonHang" method="post" id="orderForm">
+    <!-- Tên đơn hàng -->
+    <div class="form-group">
+        <label for="TenChiTietDonHang">Tên đơn hàng <span class="text-danger">*</span></label>
+        <input asp-for="TenChiTietDonHang" class="form-control" required />
+        <span class="text-danger" id="TenDonHangError"></span>
+    </div>
+
+    <!-- Ngày đặt -->
+    <div class="form-group">
+        <label for="NgayGiaoHang">Ngày giao hàng <span class="text-danger">*</span></label>
+        <input type="date" asp-for="NgayGiaoHang" class="form-control" required />
+        <span class="text-danger" id="NgayGiaoHangError"></span>
+    </div>
+
+    <!-- Product -->
+    <div class="form-group">
+        <label>Sản phẩm <span class="text-danger">*</span></label>
+        @await Component.InvokeAsync("ProductSelect")
+        <span class="text-danger" id="ProductError"></span>
+    </div>
+
+    <!-- Color -->
+    <div class="form-group">
+        <label>Màu sắc <span class="text-danger">*</span></label>
+        @await Component.InvokeAsync("ColorSelect")
+        <span class="text-danger" id="ColorError"></span>
+    </div>
+
+    <!-- Size -->
+    <div id="sizesContainer">
+        @foreach (var size in (List<SizeDto>)ViewBag.Sizes)
+        {
+            <div class="form-group d-flex align-items-center">
+                <label class="mr-2">@size.Name</label>
+                <input type="number" class="form-control w-25"
+                       data-size-id="@size.Id"
+                       min="0" value="0" />
+            </div>
+        }
+    </div>
+
+    <!-- Upload Image -->
+    <div class="form-group">
+        <label for="imageUpload">Tải lên hình ảnh</label>
+        <div class="custom-file-upload">
+            <input type="file" id="imageUpload" name="ImageFile" accept="image/*" class="form-control-file" />
+            <button type="button" class="btn btn-outline-primary btn-sm">
+                <i class="fas fa-image"></i> Chọn hình ảnh
+            </button>
+            <span id="imageFileName" class="file-name-display"></span>
+        </div>
+        <div id="imagePreview" class="image-preview mt-2"></div>
+    </div>
+
+    <!-- Upload File -->
+    <div class="form-group">
+        <label for="fileUpload">Tải lên tệp tin</label>
+        <div class="custom-file-upload">
+            <input type="file" id="fileUpload" name="AttachmentFile" class="form-control-file" />
+            <button type="button" class="btn btn-outline-secondary btn-sm">
+                <i class="fas fa-file"></i> Chọn tệp tin
+            </button>
+            <span id="fileFileName" class="file-name-display"></span>
+        </div>
+    </div>
+    <!-- Buttons -->
+    <div class="form-actions">
+        <button type="submit" class="btn btn-success">Lưu</button>
+        <button type="button" class="btn btn-secondary" onclick="closeModal()">Đóng</button>
+    </div>
+</form>
