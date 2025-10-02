@@ -11,21 +11,16 @@ namespace DevExtremeAspNetCore.Repository
         {
             _db = db;
         }
+
         public async Task<PagedResult<ChiTietDonHangViewModel>> GetAllAsync(int pageNumber = 1, int pageSize = 10)
         {
             var donHangs = await _db.DonHangs
                 .Include(dh => dh.Ctdhs)
-                    .ThenInclude(ct => ct.IdvariantNavigation)
-                        .ThenInclude(v => v.IdproNavigation)
+                    .ThenInclude(ct => ct.IdproNavigation)
                 .Include(dh => dh.Ctdhs)
-                    .ThenInclude(ct => ct.IdvariantNavigation)
-                        .ThenInclude(v => v.IdcolorNavigation)
+                    .ThenInclude(ct => ct.IdcolorNavigation)
                 .Include(dh => dh.Ctdhs)
-                    .ThenInclude(ct => ct.IdvariantNavigation)
-                        .ThenInclude(v => v.IdsizeNavigation)
-                .Include(dh => dh.Ctdhs)
-                    .ThenInclude(ct => ct.IdvariantNavigation)
-                        .ThenInclude(v => v.Images)
+                    .ThenInclude(ct => ct.IdsizeNavigation)
                 .Include(dh => dh.Ctdhs)
                     .ThenInclude(ct => ct.NoteChiTietDonHangs)
                 .ToListAsync();
@@ -36,10 +31,10 @@ namespace DevExtremeAspNetCore.Repository
                 ctdh.TenChiTietDonHang,
                 dh.NgayDat,
                 dh.KhachHang,
-                ProductName = ctdh.IdvariantNavigation.IdproNavigation.TenPro,
-                Color = ctdh.IdvariantNavigation.IdcolorNavigation.TenColor,
-                Size = ctdh.IdvariantNavigation.IdsizeNavigation.TenSize,
-                SoLuong = ctdh.SoLuong,
+                ProductName = ctdh.IdproNavigation.TenPro,
+                Color = ctdh.IdcolorNavigation.TenColor,
+                Size = ctdh.IdsizeNavigation.TenSize,
+                SoLuong = ctdh.Soluong,
                 Notes = ctdh.NoteChiTietDonHangs
                     .Select(n => new NoteChiTietDonHangViewModel
                     {
@@ -90,7 +85,6 @@ namespace DevExtremeAspNetCore.Repository
                 Items = items
             };
         }
-
 
         public async Task<List<string>> GetAllSize()
         {

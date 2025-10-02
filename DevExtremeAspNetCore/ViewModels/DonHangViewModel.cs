@@ -10,5 +10,6 @@ namespace DevExtremeAspNetCore.ViewModels
         public DateTime NgayDat { get; set; } 
         public string TenSanPham { get; set; }
         public int TongSoLuong { get; set; }
+        public List<ChiTietDonHangViewModel> Ctdhs { get; set; } = new();
     }
 }

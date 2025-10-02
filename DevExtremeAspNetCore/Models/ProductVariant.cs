@@ -25,18 +25,18 @@ public partial class ProductVariant
     [InverseProperty("IdvariantNavigation")]
     public virtual ICollection<Ctdh> Ctdhs { get; set; } = new List<Ctdh>();
 
-    [ForeignKey("Idcolor")]
-    [InverseProperty("ProductVariants")]
-    public virtual Color IdcolorNavigation { get; set; }
-
     [ForeignKey("Idpro")]
-    [InverseProperty("ProductVariants")]
     public virtual Product IdproNavigation { get; set; }
 
     [ForeignKey("Idsize")]
-    [InverseProperty("ProductVariants")]
     public virtual Size IdsizeNavigation { get; set; }
+
+    [ForeignKey("Idcolor")]
+    public virtual Color IdcolorNavigation { get; set; }
 
     [InverseProperty("IdvariantNavigation")]
     public virtual ICollection<Image> Images { get; set; } = new List<Image>();
+
+    [InverseProperty("IdvariantNavigation")]
+    public virtual ICollection<ListNpl> ListNpls { get; set; } = new List<ListNpl>();
 }
