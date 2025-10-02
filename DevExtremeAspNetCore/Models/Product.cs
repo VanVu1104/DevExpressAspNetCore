@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace DevExtremeAspNetCore.Models;
 
 [Table("Product")]
-public partial class Product
+public partial class ProductModels
 {
     [Key]
     [Column("IDPro")]
@@ -16,9 +16,7 @@ public partial class Product
     [StringLength(255)]
     public string TenPro { get; set; }
 
-    //[InverseProperty("IdproNavigation")]
-    //public virtual ICollection<ListNpl> ListNpls { get; set; } = new List<ListNpl>();
-    [InverseProperty("IdcolorNavigation")]
+    [InverseProperty("IdproNavigation")]
     public virtual ICollection<Ctdh> Ctdhs { get; set; } = new List<Ctdh>();
 
     [InverseProperty("IdproNavigation")]

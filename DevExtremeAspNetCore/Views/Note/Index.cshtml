@@ -1,310 +1,601 @@
 ﻿@model List<DevExtremeAspNetCore.ViewModels.NoteUploadViewModel>
+
 @using System.Net
 
+
+
 @{
+
     ViewData["Title"] = "Upload Notes";
+
 }
 
+
+
 <div class="container mt-4">
+
     <h2 class="mb-3">Upload File / Ảnh cho CTDH</h2>
 
+
+
     <form asp-action="Upload" asp-controller="Note" method="post" enctype="multipart/form-data">
+
         <div id="noteInputs" class="mb-3">
+
             <div class="note-item row g-2 mb-2">
+
                 <div class="col-md-4">
+
                     <input type="file" name="items[0].File" class="form-control file-input" onchange="previewFile(this)" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx" />
+
                     <div class="preview mt-2"></div>
+
                 </div>
+
                 <div class="col-md-4">
+
                     <input type="text" name="items[0].NoiDung" class="form-control" placeholder="Nhập nội dung ghi chú" />
+
                 </div>
+
                 <div class="col-md-2 d-flex align-items-center">
+
                     <input type="checkbox" name="items[0].IsImage" value="true" class="form-check-input me-2" />
+
                     <label class="form-check-label">Là ảnh?</label>
+
                 </div>
+
             </div>
+
         </div>
+
+
 
         <button type="button" class="btn btn-secondary me-2" onclick="addMore()">+ Thêm file</button>
+
         <button type="submit" class="btn btn-primary">Upload</button>
+
     </form>
 
+
+
     @if (ViewBag.Message != null)
+
     {
+
         <div class="alert alert-info mt-4">@ViewBag.Message</div>
 
+
+
         @if (ViewBag.Urls != null)
+
         {
+
             <h4 class="mt-4 mb-3">Danh sách file đã upload</h4>
+
             <div class="row mt-3">
+
                 @foreach (var url in (List<string>)ViewBag.Urls)
+
                 {
+
                     var encodedUrl = WebUtility.UrlEncode(url);
+
                     var lowerUrl = url.ToLower();
 
+
+
                     <div class="col-md-4 col-lg-3 mb-3">
+
                         @if (lowerUrl.Contains(".png") || lowerUrl.Contains(".jpg") || lowerUrl.Contains(".jpeg") || lowerUrl.Contains(".gif") || lowerUrl.Contains(".webp"))
+
                         {
+
                             <div class="card shadow-sm h-100">
+
                                 <div class="position-relative overflow-hidden" style="height: 200px; background: #f8f9fa;">
+
                                     <img src="@url"
-                                         class="card-img-top preview-img"
-                                         onclick="openImageModal('@url')"
-                                         style="cursor: pointer; width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s;"
-                                         onmouseover="this.style.transform='scale(1.05)'"
-                                         onmouseout="this.style.transform='scale(1)'" />
+                                                              class="card-img-top preview-img"
+                                                              onclick="openImageModal('@url')"
+                                                              style="cursor: pointer; width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s;"
+                                                              onmouseover="this.style.transform='scale(1.05)'"
+                                                              onmouseout="this.style.transform='scale(1)'" />
+
                                 </div>
+
                                 <div class="card-body p-2">
+
                                     <div class="d-flex justify-content-between align-items-center">
+
                                         <small class="text-muted"><i class="bi bi-image"></i> Ảnh</small>
+
                                         <a href="@url" target="_blank" class="btn btn-sm btn-outline-primary">
+
                                             <i class="bi bi-box-arrow-up-right"></i>
+
                                         </a>
+
                                     </div>
+
                                 </div>
+
                             </div>
+
                         }
+
                         else if (lowerUrl.Contains(".pdf"))
+
                         {
+
                             <div class="card shadow-sm h-100">
+
                                 <div class="position-relative d-flex align-items-center justify-content-center"
-                                     style="height: 200px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                                                        style="height: 200px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+
                                     <i class="bi bi-file-pdf" style="font-size: 4rem; color: white;"></i>
+
                                 </div>
+
                                 <div class="card-body p-2">
+
                                     <div class="d-flex justify-content-between align-items-center">
+
                                         <small class="text-muted"><i class="bi bi-file-pdf"></i> PDF</small>
+
                                         <button class="btn btn-sm btn-outline-primary" onclick="openDocumentModal('@url', 'pdf')">
+
                                             <i class="bi bi-eye"></i> Xem
+
                                         </button>
+
                                     </div>
+
                                 </div>
+
                             </div>
+
                         }
+
                         else if (lowerUrl.Contains(".doc") || lowerUrl.Contains(".docx"))
+
                         {
+
                             <div class="card shadow-sm h-100">
+
                                 <div class="position-relative d-flex align-items-center justify-content-center"
-                                     style="height: 200px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                                        style="height: 200px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+
                                     <i class="bi bi-file-word" style="font-size: 4rem; color: white;"></i>
+
                                 </div>
+
                                 <div class="card-body p-2">
+
                                     <div class="d-flex justify-content-between align-items-center">
+
                                         <small class="text-muted"><i class="bi bi-file-word"></i> Word</small>
+
                                         <button class="btn btn-sm btn-outline-primary" onclick="openDocumentModal('@url', 'word')">
+
                                             <i class="bi bi-eye"></i> Xem
+
                                         </button>
+
                                     </div>
+
                                 </div>
+
                             </div>
+
                         }
+
                         else if (lowerUrl.Contains(".xls") || lowerUrl.Contains(".xlsx"))
+
                         {
+
                             <div class="card shadow-sm h-100">
+
                                 <div class="position-relative d-flex align-items-center justify-content-center"
-                                     style="height: 200px; background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">
+                                                        style="height: 200px; background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">
+
                                     <i class="bi bi-file-excel" style="font-size: 4rem; color: white;"></i>
+
                                 </div>
+
                                 <div class="card-body p-2">
+
                                     <div class="d-flex justify-content-between align-items-center">
+
                                         <small class="text-muted"><i class="bi bi-file-excel"></i> Excel</small>
+
                                         <button class="btn btn-sm btn-outline-primary" onclick="openDocumentModal('@url', 'excel')">
+
                                             <i class="bi bi-eye"></i> Xem
+
                                         </button>
+
                                     </div>
+
                                 </div>
+
                             </div>
+
                         }
+
                         else
+
                         {
+
                             <div class="card shadow-sm h-100">
+
                                 <div class="position-relative d-flex align-items-center justify-content-center"
-                                     style="height: 200px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                                        style="height: 200px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+
                                     <i class="bi bi-file-earmark" style="font-size: 4rem; color: white;"></i>
+
                                 </div>
+
                                 <div class="card-body p-2">
+
                                     <div class="d-flex justify-content-between align-items-center">
+
                                         <small class="text-muted"><i class="bi bi-file-earmark"></i> File</small>
+
                                         <a href="@url" target="_blank" class="btn btn-sm btn-outline-primary">
+
                                             <i class="bi bi-download"></i>
+
                                         </a>
+
                                     </div>
+
                                 </div>
+
                             </div>
+
                         }
+
                     </div>
+
                 }
+
             </div>
+
         }
+
     }
+
 </div>
+
+
 
 <!-- Modal phóng to ảnh -->
+
 <div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
+
     <div class="modal-dialog modal-dialog-centered modal-xl">
+
         <div class="modal-content bg-dark">
+
             <div class="modal-header border-0">
+
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+
             </div>
+
             <div class="modal-body text-center p-0">
+
                 <img id="modalImage" src="" class="img-fluid" style="max-height: 85vh; width: auto;" />
+
             </div>
+
         </div>
+
     </div>
+
 </div>
+
+
 
 <!-- Modal xem tài liệu -->
+
 <div class="modal fade" id="documentModal" tabindex="-1" aria-hidden="true">
+
     <div class="modal-dialog modal-dialog-centered modal-xl" style="max-width: 95vw;">
+
         <div class="modal-content" style="height: 90vh;">
+
             <div class="modal-header">
+
                 <h5 class="modal-title">Xem tài liệu</h5>
+
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
             </div>
+
             <div class="modal-body p-0">
+
                 <iframe id="documentFrame" src="" style="width: 100%; height: 100%; border: none;"></iframe>
+
             </div>
+
         </div>
+
     </div>
+
 </div>
 
+
+
 <script>
+
     let index = 1;
 
+
+
     function addMore() {
+
         const container = document.getElementById("noteInputs");
+
         const div = document.createElement("div");
+
         div.classList.add("note-item", "row", "g-2", "mb-2");
+
         div.innerHTML = `
+
             <div class="col-md-4">
+
                 <input type="file" name="items[${index}].File" class="form-control file-input" onchange="previewFile(this)" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx" />
+
                 <div class="preview mt-2"></div>
+
             </div>
+
             <div class="col-md-4">
+
                 <input type="text" name="items[${index}].NoiDung" class="form-control" placeholder="Nhập nội dung ghi chú" />
+
             </div>
+
             <div class="col-md-2 d-flex align-items-center">
+
                 <input type="checkbox" name="items[${index}].IsImage" value="true" class="form-check-input me-2" />
+
                 <label class="form-check-label">Là ảnh?</label>
+
             </div>
+
         `;
+
         container.appendChild(div);
+
         index++;
+
     }
+
+
 
     // Preview file trước khi upload với khả năng phóng to
+
     function previewFile(input) {
+
         const file = input.files[0];
+
         const previewContainer = input.nextElementSibling;
+
         previewContainer.innerHTML = "";
 
+
+
         if (file) {
+
             if (file.type.startsWith("image/")) {
+
                 const reader = new FileReader();
+
                 reader.onload = e => {
+
                     previewContainer.innerHTML = `
+
                         <div class="position-relative d-inline-block">
+
                             <img src="${e.target.result}"
+
                                  class="img-thumbnail"
+
                                  style="max-height: 150px; cursor: pointer; transition: transform 0.2s;"
+
                                  onclick="openImageModal('${e.target.result}')"
+
                                  onmouseover="this.style.transform='scale(1.05)'"
+
                                  onmouseout="this.style.transform='scale(1)'" />
+
                             <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0" onclick="removeFile(this)">✕</button>
+
                         </div>`;
+
                 };
+
                 reader.readAsDataURL(file);
+
             }
+
             else if (file.type === "application/pdf") {
+
                 previewContainer.innerHTML = `
+
                     <div class="d-inline-block position-relative">
+
                         <span class="badge bg-danger"><i class="bi bi-file-pdf"></i> ${file.name}</span>
+
                         <button type="button" class="btn btn-sm btn-danger ms-2" onclick="removeFile(this)">✕</button>
+
                     </div>`;
+
             }
+
             else if (file.name.endsWith('.doc') || file.name.endsWith('.docx')) {
+
                 previewContainer.innerHTML = `
+
                     <div class="d-inline-block position-relative">
+
                         <span class="badge bg-primary"><i class="bi bi-file-word"></i> ${file.name}</span>
+
                         <button type="button" class="btn btn-sm btn-danger ms-2" onclick="removeFile(this)">✕</button>
+
                     </div>`;
+
             }
+
             else if (file.name.endsWith('.xls') || file.name.endsWith('.xlsx')) {
+
                 previewContainer.innerHTML = `
+
                     <div class="d-inline-block position-relative">
+
                         <span class="badge bg-success"><i class="bi bi-file-excel"></i> ${file.name}</span>
+
                         <button type="button" class="btn btn-sm btn-danger ms-2" onclick="removeFile(this)">✕</button>
+
                     </div>`;
+
             }
+
             else {
+
                 previewContainer.innerHTML = `
+
                     <div class="d-inline-block position-relative">
+
                         <span class="badge bg-secondary"><i class="bi bi-file-earmark"></i> ${file.name}</span>
+
                         <button type="button" class="btn btn-sm btn-danger ms-2" onclick="removeFile(this)">✕</button>
+
                     </div>`;
+
             }
+
         }
+
     }
+
+
 
     // Xóa file đã chọn
+
     function removeFile(btn) {
+
         const previewDiv = btn.closest(".note-item").querySelector(".preview");
+
         const fileInput = btn.closest(".note-item").querySelector("input[type=file]");
+
         fileInput.value = "";
+
         previewDiv.innerHTML = "";
+
     }
+
+
 
     // Mở modal phóng to ảnh
+
     function openImageModal(src) {
+
         document.getElementById("modalImage").src = src;
+
         const modal = new bootstrap.Modal(document.getElementById('imageModal'));
+
         modal.show();
+
     }
+
+
 
     // Mở modal xem tài liệu
+
     function openDocumentModal(url, type) {
+
         let iframeSrc = '';
 
+
+
         // Sử dụng Google Docs Viewer cho tất cả các loại file
+
         // Google Docs Viewer hỗ trợ: PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX
+
         iframeSrc = `https://docs.google.com/gview?url=${encodeURIComponent(url)}&embedded=true`;
 
+
+
         document.getElementById("documentFrame").src = iframeSrc;
+
         const modal = new bootstrap.Modal(document.getElementById('documentModal'));
+
         modal.show();
+
     }
+
+
 
     // Làm sạch iframe khi đóng modal
+
     document.getElementById('documentModal').addEventListener('hidden.bs.modal', function () {
+
         document.getElementById("documentFrame").src = '';
+
     });
+
 </script>
 
+
+
 <style>
-    .card {
-        transition: transform 0.2s, box-shadow 0.2s;
+
+        .card {
+                transition: transform 0.2s, box-shadow 0.2s;
+
     }
 
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1) !important;
-        }
 
-    .preview-img:hover {
-        opacity: 0.9;
+
+            .card:hover {
+                    transform: translateY(-5px);
+                    box-shadow: 0 8px 16px rgba(0,0,0,0.1) !important;
+
     }
 
-    .modal-backdrop {
-        background-color: rgba(0, 0, 0, 0.8);
+
+
+        .preview-img:hover {
+                opacity: 0.9;
+
     }
 
-    #imageModal .modal-content {
-        background-color: transparent;
-        border: none;
-        box-shadow: none;
+
+
+        .modal-backdrop {
+                background-color: rgba(0, 0, 0, 0.8);
+
     }
 
-    .btn-close-white {
-        filter: invert(1);
+
+
+        #imageModal .modal-content {
+                background-color: transparent;
+                border: none;
+                box-shadow: none;
+
     }
+
+
+
+        .btn-close-white {
+                filter: invert(1);
+
+    }
+
 </style>

@@ -19,33 +19,29 @@ namespace DevExtremeAspNetCore.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var query = from dh in _db.DonHangs
-                        join ct in _db.Ctdhs on dh.Iddh equals ct.Iddh
-                        join p in _db.Products on ct.Idpro equals p.Idpro
-                        join s in _db.Sizes on ct.Idsize equals s.Idsize
-                        select new
-                        {
-                            dh.Iddh,
-                            dh.KhachHang,
-                            dh.NgayDat,
-                            TenSanPham = p.TenPro + " - " + s.TenSize,
-                            SoLuong = ct.Soluong ?? 0
-                        };
-
-            var result = await query
-                .GroupBy(x => new { x.Iddh, x.KhachHang, x.NgayDat, x.TenSanPham })
-                .Select(g => new DonHangViewModel
-                {
-                    IDDH = g.Key.Iddh,
-                    TenKhachHang = g.Key.KhachHang,
-                    NgayDat = g.Key.NgayDat.HasValue
-                        ? g.Key.NgayDat.Value.ToDateTime(TimeOnly.MinValue)
-                        : DateTime.MinValue,
-                    TenSanPham = g.Key.TenSanPham,
-                    TongSoLuong = g.Sum(x => x.SoLuong)
-                })
+            var donHangs = await _db.DonHangs
+                .Include(dh => dh.Ctdhs)
+                        .ThenInclude(v => v.IdproNavigation)
                 .ToListAsync();
 
+            var result = donHangs.SelectMany(dh => dh.Ctdhs, (dh, ctdh) => new
+            {
+                dh.Iddh,
+                dh.KhachHang,
+                dh.NgayDat,
+                TenSanPham = ctdh.IdproNavigation.TenPro,
+                SoLuong = ctdh.SoLuong ?? 0
+            })
+            .GroupBy(x => new { x.Iddh, x.KhachHang, x.NgayDat, x.TenSanPham })
+            .Select(g => new DonHangViewModel
+            {
+                IDDH = g.Key.Iddh,
+                TenKhachHang = g.Key.KhachHang,
+                NgayDat = g.Key.NgayDat,
+                TenSanPham = g.Key.TenSanPham,
+                TongSoLuong = g.Sum(x => x.SoLuong)
+            })
+            .ToList();
             return View(result);
         }
 
@@ -54,35 +50,29 @@ namespace DevExtremeAspNetCore.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var query = from dh in _db.DonHangs
-                        join ct in _db.Ctdhs on dh.Iddh equals ct.Iddh
-                        join v in _db.ProductVariants
-                             on new { ct.Idpro, ct.Idsize, ct.Idcolor }
-                             equals new { v.Idpro, v.Idsize, v.Idcolor }
-                        join p in _db.Products on v.Idpro equals p.Idpro
-                        select new
-                        {
-                            dh.Iddh,
-                            dh.KhachHang,
-                            dh.NgayDat,
-                            TenSanPham = p.TenPro,
-                            SoLuong = ct.Soluong ?? 0
-                        };
-
-            var result = await query
-                .GroupBy(x => new { x.Iddh, x.KhachHang, x.NgayDat, x.TenSanPham })
-                .Select(g => new DonHangViewModel
-                {
-                    IDDH = g.Key.Iddh,
-                    TenKhachHang = g.Key.KhachHang,
-                    NgayDat = g.Key.NgayDat.HasValue
-                        ? g.Key.NgayDat.Value.ToDateTime(TimeOnly.MinValue)
-                        : DateTime.MinValue,
-                    TenSanPham = g.Key.TenSanPham,
-                    TongSoLuong = g.Sum(x => x.SoLuong)
-                })
+            var donHangs = await _db.DonHangs
+                .Include(dh => dh.Ctdhs)
+                        .ThenInclude(v => v.IdproNavigation)
                 .ToListAsync();
 
+            var result = donHangs.SelectMany(dh => dh.Ctdhs, (dh, ctdh) => new
+            {
+                dh.Iddh,
+                dh.KhachHang,
+                dh.NgayDat,
+                TenSanPham = ctdh.IdproNavigation.TenPro,
+                SoLuong = ctdh.SoLuong ?? 0
+            })
+            .GroupBy(x => new { x.Iddh, x.KhachHang, x.NgayDat, x.TenSanPham })
+            .Select(g => new DonHangViewModel
+            {
+                IDDH = g.Key.Iddh,
+                TenKhachHang = g.Key.KhachHang,
+                NgayDat = g.Key.NgayDat,
+                TenSanPham = g.Key.TenSanPham,
+                TongSoLuong = g.Sum(x => x.SoLuong)
+            })
+            .ToList();
             return View("Index", result);
         }
     

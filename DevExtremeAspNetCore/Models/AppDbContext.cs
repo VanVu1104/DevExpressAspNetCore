@@ -32,7 +32,7 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<Npl> Npls { get; set; }
 
-    public virtual DbSet<Product> Products { get; set; }
+    public virtual DbSet<ProductModels> Products { get; set; }
 
     public virtual DbSet<ProductVariant> ProductVariants { get; set; }
 
@@ -40,8 +40,7 @@ public partial class AppDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=LAPTOP-LGQDV4F7\\SQLEXPRESS;Database=QLMayMac;Trusted_Connection=True;TrustServerCertificate=True;");
-
+        => optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=QLMayMac;Trusted_Connection=True;TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -54,25 +53,15 @@ public partial class AppDbContext : DbContext
         {
             entity.HasKey(e => e.Idctdh).HasName("PK__CTDH__0F87803D8E91CC5D");
 
+            entity.HasOne(d => d.IdcolorNavigation).WithMany(p => p.Ctdhs).HasConstraintName("FK_CTDH_Color");
+
             entity.HasOne(d => d.IddhNavigation).WithMany(p => p.Ctdhs)
                 .HasForeignKey(d => d.Iddh)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__CTDH__IDDH__33D4B598");
+            entity.HasOne(d => d.IdproNavigation).WithMany(p => p.Ctdhs).HasConstraintName("FK_CTDH_Product");
 
-            entity.HasOne(d => d.IdproNavigation).WithMany(p => p.Ctdhs)
-                .HasForeignKey(d => d.Idpro)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__CTDH__IDPro");
-
-            entity.HasOne(d => d.IdcolorNavigation).WithMany(p => p.Ctdhs)
-                .HasForeignKey(d => d.Idcolor)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__CTDH__IDColor");
-
-            entity.HasOne(d => d.IdsizeNavigation).WithMany(p => p.Ctdhs)
-                .HasForeignKey(d => d.Idsize)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__CTDH__IDSize");
+            entity.HasOne(d => d.IdsizeNavigation).WithMany(p => p.Ctdhs).HasConstraintName("FK_CTDH_Size");
         });
 
 
@@ -94,13 +83,15 @@ public partial class AppDbContext : DbContext
         {
             entity.HasKey(e => e.Idlist).HasName("PK__ListNPL__F5D88C0DBA2934FC");
 
+            entity.Property(e => e.Idvariant).HasDefaultValue(1);
+
             entity.HasOne(d => d.IdnplNavigation).WithMany(p => p.ListNpls)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__ListNPL__IDNPL__3D5E1FD2");
 
             entity.HasOne(d => d.IdvariantNavigation).WithMany(p => p.ListNpls)
-        .OnDelete(DeleteBehavior.ClientSetNull)
-        .HasConstraintName("FK__ListNPL__IDProVariant__3C69FB99");
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ListNPL_ProductVariant");
         });
 
         modelBuilder.Entity<NoteChiTietDonHang>(entity =>
@@ -126,7 +117,7 @@ public partial class AppDbContext : DbContext
             entity.HasKey(e => e.Idnpl).HasName("PK__NPL__945ECD731ACBC4E7");
         });
 
-        modelBuilder.Entity<Product>(entity =>
+        modelBuilder.Entity<ProductModels>(entity =>
         {
             entity.HasKey(e => e.Idpro).HasName("PK__Product__98F9285982DB1785");
         });

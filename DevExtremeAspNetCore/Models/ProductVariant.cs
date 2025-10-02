@@ -21,12 +21,14 @@ public partial class ProductVariant
 
     [Column("IDColor")]
     public int Idcolor { get; set; }
-
-    [InverseProperty("IdvariantNavigation")]
-    public virtual ICollection<Ctdh> Ctdhs { get; set; } = new List<Ctdh>();
+  
+    [ForeignKey("Idcolor")]
+    [InverseProperty("ProductVariants")]
+    public virtual Color IdcolorNavigation { get; set; }
 
     [ForeignKey("Idpro")]
-    public virtual Product IdproNavigation { get; set; }
+    [InverseProperty("ProductVariants")]
+    public virtual ProductModels IdproNavigation { get; set; }
 
     [ForeignKey("Idsize")]
     public virtual Size IdsizeNavigation { get; set; }

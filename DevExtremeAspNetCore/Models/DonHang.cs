@@ -14,7 +14,7 @@ public partial class DonHangModels
     [Column("IDDH")]
     public int Iddh { get; set; }
 
-    public DateOnly? NgayDat { get; set; }
+    public DateTime NgayDat { get; set; }
 
     [StringLength(255)]
     public string KhachHang { get; set; }

@@ -19,6 +19,9 @@ public partial class ListNpl
     [Column("IDNPL")]
     public int Idnpl { get; set; }
 
+    [Column("IDVariant")]
+    public int Idvariant { get; set; }
+
     [ForeignKey("Idnpl")]
     [InverseProperty("ListNpls")]
     public virtual Npl IdnplNavigation { get; set; }

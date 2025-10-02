@@ -20,25 +20,34 @@ public partial class Ctdh
     [Column("IDDH")]
     public int Iddh { get; set; }
 
-    [Column("IDPro")]
-    public int Idpro { get; set; }
+    public int? SoLuong { get; set; }
 
-    [Column("IDSize")]
-    public int Idsize { get; set; }
+    [Column(TypeName = "datetime")]
+    public DateTime NgayGiaoHang { get; set; }
+
+    [Column("IDPro")]
+    public int? Idpro { get; set; }
 
     [Column("IDColor")]
-    public int Idcolor { get; set; }
+    public int? Idcolor { get; set; }
 
-    public int? Soluong { get; set; }
+    [Column("IDSize")]
+    public int? Idsize { get; set; }
+
+    [ForeignKey("Idcolor")]
+    [InverseProperty("Ctdhs")]
+    public virtual Color IdcolorNavigation { get; set; }
 
     [ForeignKey("Iddh")]
     [InverseProperty("Ctdhs")]
     public virtual DonHangViewModel IddhNavigation { get; set; }
 
-    [ForeignKey("Idpro")]
-    public virtual Product IdproNavigation { get; set; }
+    [InverseProperty("Ctdhs")]
+    public virtual ProductModels IdproNavigation { get; set; }
 
     [ForeignKey("Idsize")]
+    [InverseProperty("Ctdhs")]
+
     public virtual Size IdsizeNavigation { get; set; }
 
     [ForeignKey("Idcolor")]
