@@ -25,5 +25,5 @@ public partial class NotePro
 
     [ForeignKey("Idpro")]
     [InverseProperty("NotePros")]
-    public virtual Product IdproNavigation { get; set; }
+    public virtual ProductModels IdproNavigation { get; set; }
 }

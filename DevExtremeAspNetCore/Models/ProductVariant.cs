@@ -28,7 +28,7 @@ public partial class ProductVariant
 
     [ForeignKey("Idpro")]
     [InverseProperty("ProductVariants")]
-    public virtual Product IdproNavigation { get; set; }
+    public virtual ProductModels IdproNavigation { get; set; }
 
     [ForeignKey("Idsize")]
     [InverseProperty("ProductVariants")]

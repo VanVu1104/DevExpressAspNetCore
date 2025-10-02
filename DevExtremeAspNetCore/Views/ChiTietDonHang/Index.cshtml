@@ -47,14 +47,14 @@
 </div>
 
 <div class="donhang-container">
-    <h2>Đơn hàng</h2>
-    <button class="btn btn-add" onclick="openModal('/ChiTietDonHang/Create', 'Thêm đơn hàng')">
-        Thêm đơn hàng
+    <h2>Chi tiết đơn hàng</h2>
+    <button class="btn btn-add" onclick="openModal('/ChiTietDonHang/Create', 'Thêm chi tiết đơn hàng')">
+        Thêm mới
     </button>
     <br /><br />
     @(
         Html.DevExtreme().DataGrid<ChiTietDonHangViewModel>()
-        .ID("donhangGrid")
+        .ID("chiTietDonHangGrid")
         .DataSource(ds => ds.Mvc()
         .Controller("ChiTietDonHang")
         .LoadAction("GetAll")

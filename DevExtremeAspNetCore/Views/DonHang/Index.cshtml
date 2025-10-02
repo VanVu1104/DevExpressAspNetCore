@@ -1,0 +1,20 @@
+﻿@using System.Text.Json
+@using DevExtremeAspNetCore.Models
+@using DevExtremeAspNetCore.ViewModels
+@model IEnumerable<DonHangViewModel>
+
+@{
+    ViewBag.Title = "Danh sách đơn hàng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/css/dhlist.css" rel="stylesheet" />
+<h2>Danh sách đơn hàng</h2>
+<div id="donhangGrid"></div>
+
+@section scripts {
+    <script>
+        var donHangData = @Html.Raw(JsonSerializer.Serialize(Model));
+    </script>
+    <script src="~/js/dhlist.js"></script>
+    <script>$("#Layer_1").click();</script>
+}

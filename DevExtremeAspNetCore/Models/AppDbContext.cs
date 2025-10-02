@@ -19,7 +19,7 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<Ctdh> Ctdhs { get; set; }
 
-    public virtual DbSet<DonHang> DonHangs { get; set; }
+    public virtual DbSet<DonHangModels> DonHangs { get; set; }
 
     public virtual DbSet<Image> Images { get; set; }
 
@@ -27,11 +27,12 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<NoteChiTietDonHang> NoteChiTietDonHangs { get; set; }
 
+
     public virtual DbSet<NoteNpl> NoteNpls { get; set; }
 
     public virtual DbSet<Npl> Npls { get; set; }
 
-    public virtual DbSet<Product> Products { get; set; }
+    public virtual DbSet<ProductModels> Products { get; set; }
 
     public virtual DbSet<ProductVariant> ProductVariants { get; set; }
 
@@ -63,7 +64,7 @@ public partial class AppDbContext : DbContext
             entity.HasOne(d => d.IdsizeNavigation).WithMany(p => p.Ctdhs).HasConstraintName("FK_CTDH_Size");
         });
 
-        modelBuilder.Entity<DonHang>(entity =>
+        modelBuilder.Entity<DonHangModels>(entity =>
         {
             entity.HasKey(e => e.Iddh).HasName("PK__DonHang__B87DB898CBDF277F");
         });
@@ -115,9 +116,24 @@ public partial class AppDbContext : DbContext
             entity.HasKey(e => e.Idnpl).HasName("PK__NPL__945ECD731ACBC4E7");
         });
 
-        modelBuilder.Entity<Product>(entity =>
+        modelBuilder.Entity<ProductModels>(entity =>
         {
             entity.HasKey(e => e.Idpro).HasName("PK__Product__98F9285982DB1785");
+        });
+        // NoteChiTietDonHang entity configuration
+        modelBuilder.Entity<NoteChiTietDonHang>(entity =>
+        {
+            entity.HasKey(e => e.Idnote).HasName("PK__NoteChiT__E5F1D2E7XXXXXXX");
+
+            entity.Property(e => e.UrlFile).HasMaxLength(500);
+            entity.Property(e => e.UrlImage).HasMaxLength(500);
+            entity.Property(e => e.NoiDung).HasMaxLength(500);
+
+            entity.HasOne(d => d.IdctdhNavigation)
+                .WithMany(p => p.NoteChiTietDonHangs)
+                .HasForeignKey(d => d.Idctdh)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__NoteChiTietDonHang__CTDH");
         });
 
         modelBuilder.Entity<ProductVariant>(entity =>

@@ -28,4 +28,5 @@ public partial class NoteChiTietDonHang
     [ForeignKey("Idctdh")]
     [InverseProperty("NoteChiTietDonHangs")]
     public virtual Ctdh IdctdhNavigation { get; set; }
+
 }

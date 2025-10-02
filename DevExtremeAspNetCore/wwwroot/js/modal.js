@@ -1,7 +1,10 @@
 ﻿function openModal(url, title) {
     $("#modalTitle").text(title);
     // load partial view (_Create) từ server 
-    $("#modalBody").load(url, function () { $("#formModal").show(); });
+    $("#modalBody").load(url, function ()
+    {
+        $("#formModal").show();
+    });
 }
 function closeModal() {
     $("#formModal").hide();
@@ -10,7 +13,7 @@ function closeModal() {
 // Sau khi submit form thành công 
 function onFormSuccess() {
     closeModal();
-    $("#donhangGrid").dxDataGrid("instance").refresh();
+    $("#chiTietDonHangGrid").dxDataGrid("instance").refresh();
     DevExpress.ui.notify(
         {
             message: "Đơn hàng đã được lưu thành công!", type: "success", displayTime: 2500,
@@ -38,14 +41,14 @@ function validateForm() {
     }
     // Validate Ngày giao hàng
     var NgayGiaoHang = $("#NgayGiaoHang").val();
-    if (!ngayGiaoHang) {
+    if (!NgayGiaoHang) {
         showError("NgayGiaoHang", "Vui lòng chọn ngày giao hàng");
         isValid = false;
     } else {
         // Chuyển string thành Date object
         var today = new Date();
         today.setHours(0, 0, 0, 0); // reset giờ về 00:00 để so sánh chính xác
-        var selectedDate = new Date(ngayGiaoHang);
+        var selectedDate = new Date(NgayGiaoHang);
 
         if (selectedDate < today) {
             showError("NgayGiaoHang", "Ngày giao hàng phải lớn hơn hoặc bằng ngày hiện tại");
@@ -61,6 +64,9 @@ function validateForm() {
     var colorId = $("#IdColor").val();
     if (!colorId) {
         showError("Color", "Vui lòng chọn màu sắc"); isValid = false;
+    }
+    if (!isValid) {
+        scrollToFirstError();
     }
     return isValid;
 }
@@ -117,3 +123,16 @@ $(document).on("submit", "#orderForm", function (e) {
 $(document).on("change", "#NgayDat", function () {
     $("#NgayDatError").text(""); $(this).removeClass("is-invalid");
 });
+// Hàm scroll đến field lỗi đầu tiên
+function scrollToFirstError() {
+    var firstError = $(".is-invalid").first();
+    if (firstError.length > 0) {
+        // Scroll đến element với offset để không bị che bởi header (nếu có)
+        $('html, body').animate({
+            scrollTop: firstError.offset().top - 100 // 100px offset từ top
+        }, 300); // 300ms animation
+
+        // Focus vào field để người dùng có thể sửa luôn
+        firstError.focus();
+    }
+}

@@ -39,15 +39,16 @@ public partial class Ctdh
 
     [ForeignKey("Iddh")]
     [InverseProperty("Ctdhs")]
-    public virtual DonHang IddhNavigation { get; set; }
+    public virtual DonHangModels IddhNavigation { get; set; }
 
     [ForeignKey("Idpro")]
     [InverseProperty("Ctdhs")]
-    public virtual Product IdproNavigation { get; set; }
+    public virtual ProductModels IdproNavigation { get; set; }
 
     [ForeignKey("Idsize")]
     [InverseProperty("Ctdhs")]
     public virtual Size IdsizeNavigation { get; set; }
+
 
     [InverseProperty("IdctdhNavigation")]
     public virtual ICollection<NoteChiTietDonHang> NoteChiTietDonHangs { get; set; } = new List<NoteChiTietDonHang>();

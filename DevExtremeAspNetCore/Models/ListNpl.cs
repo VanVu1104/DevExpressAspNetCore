@@ -26,4 +26,5 @@ public partial class ListNpl
     [ForeignKey("Idvariant")]
     [InverseProperty("ListNpls")]
     public virtual ProductVariant IdvariantNavigation { get; set; }
+
 }
