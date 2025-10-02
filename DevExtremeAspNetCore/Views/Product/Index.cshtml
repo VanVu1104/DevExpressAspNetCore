@@ -14,6 +14,7 @@
                 <th>ID</th>
                 <th>Tên sản phẩm</th>
                 <th>Ảnh</th>
+                <th>NPL</th>
             </tr>
         </thead>
         <tbody>
@@ -34,6 +35,21 @@
                                         <img src="@img.Url" alt="Ảnh sản phẩm"
                                              style="width:60px;height:60px;object-fit:cover;margin:2px;cursor:pointer"
                                              onclick="showImageModal('@img.Url')" />
+                                    }
+                                }
+                            }
+                        }
+                    </td>
+                    <td>
+                        @if (item.ProductVariants != null)
+                        {
+                            foreach (var variant in item.ProductVariants)
+                            {
+                                if (variant.ListNpls != null)
+                                {
+                                    foreach (var npl in variant.ListNpls)
+                                    {
+                                        <span class="badge bg-info m-1">@npl.IdnplNavigation?.TenNpl</span>
                                     }
                                 }
                             }
@@ -60,7 +76,7 @@
                 <div class="row mb-2">
                     <div class="col-md-6">
                         <label>Size</label>
-                        <select name="Variants[0].Idsize" class="form-select">
+                        <select name="Variants[0].IDSize" class="form-select">
                             @foreach (var s in ViewBag.Sizes)
                             {
                                 <option value="@s.Idsize">@s.TenSize</option>
@@ -69,7 +85,7 @@
                     </div>
                     <div class="col-md-6">
                         <label>Màu</label>
-                        <select name="Variants[0].Idcolor" class="form-select">
+                        <select name="Variants[0].IDColor" class="form-select">
                             @foreach (var c in ViewBag.Colors)
                             {
                                 <option value="@c.Idcolor">@c.TenColor</option>
@@ -85,6 +101,59 @@
                            onchange="previewImages(this, 'previewContainer0')" />
                     <div id="previewContainer0" class="mt-2 d-flex flex-wrap"></div>
                 </div>
+
+                <!-- Thêm phần NPL -->
+                <div class="npl-container mt-3">
+                    <h6>Nguyên phụ liệu</h6>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Chọn NPL có sẵn</label>
+                            <select name="Variants[0].NPLs[0].IDNPL" class="form-select">
+                                <option value="">-- Thêm mới --</option>
+                                @foreach (var npl in ViewBag.NPLs)
+                                {
+                                    <option value="@npl.Idnpl">@npl.TenNpl</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Tên NPL (nếu thêm mới)</label>
+                            <input type="text" name="Variants[0].NPLs[0].TenNPL" class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-md-3">
+                            <input type="text" name="Variants[0].NPLs[0].ColorNPL" placeholder="Màu" class="form-control" />
+                        </div>
+                        <div class="col-md-2">
+                            <input type="number" name="Variants[0].NPLs[0].KhoVai" placeholder="Kho vải" class="form-control" />
+                        </div>
+                        <div class="col-md-2">
+                            <input type="text" name="Variants[0].NPLs[0].Loai" placeholder="Loại" class="form-control" />
+                        </div>
+                        <div class="col-md-2">
+                            <input type="text" name="Variants[0].NPLs[0].DonVi" placeholder="Đơn vị" class="form-control" />
+                        </div>
+                        <div class="col-md-3">
+                            <input type="number" name="Variants[0].NPLs[0].SoLuong" placeholder="Số lượng" class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="mt-2">
+                        <label>File đính kèm</label>
+                        <input type="file" name="Variants[0].NPLs[0].Files" multiple class="form-control" />
+                    </div>
+                    <div class="mt-2">
+                        <label>Ảnh NPL</label>
+                        <input type="file" name="Variants[0].NPLs[0].Images" multiple accept="image/*" class="form-control" />
+                    </div>
+                    <div class="mt-2">
+                        <label>Ghi chú</label>
+                        <textarea name="Variants[0].NPLs[0].NoiDung" class="form-control"></textarea>
+                    </div>
+                </div>
+                <!-- End NPL -->
             </div>
         </div>
 
@@ -107,15 +176,13 @@
     <script>
         function previewImages(input, previewContainerId) {
             const container = document.getElementById(previewContainerId);
-            container.innerHTML = ""; 
-
-            const dt = new DataTransfer(); 
+            container.innerHTML = "";
+            const dt = new DataTransfer();
 
             Array.from(input.files).forEach(file => {
                 if (file.type.startsWith("image/")) {
                     const reader = new FileReader();
                     reader.onload = e => {
-
                         const wrapper = document.createElement("div");
                         wrapper.className = "position-relative m-1 d-inline-block";
 
@@ -129,7 +196,6 @@
 
                         img.onclick = () => showImageModal(e.target.result);
 
-
                         const removeBtn = document.createElement("span");
                         removeBtn.innerHTML = "&times;";
                         removeBtn.className = "position-absolute top-0 end-0 bg-danger text-white rounded-circle";
@@ -137,7 +203,6 @@
                         removeBtn.style.padding = "0 6px";
                         removeBtn.onclick = () => {
                             wrapper.remove();
-
                             const newDt = new DataTransfer();
                             Array.from(dt.files).forEach(f => {
                                 if (f !== file) newDt.items.add(f);
@@ -150,13 +215,9 @@
                         container.appendChild(wrapper);
                     };
                     reader.readAsDataURL(file);
-
-
                     dt.items.add(file);
                 }
             });
-
-
             input.files = dt.files;
         }
 
