@@ -46,7 +46,12 @@ namespace DevExtremeAspNetCore.Controllers
             await _nplRepo.DeleteAsync(id);
             return RedirectToAction("Index");
         }
-
+        [HttpGet]
+        public async Task<JsonResult> GetColors(string term)
+        {
+            var data = await _nplRepo.GetColorsAsync(term);
+            return Json(data.Select(x => new { Name = x }));
+        }
     }
 
 }

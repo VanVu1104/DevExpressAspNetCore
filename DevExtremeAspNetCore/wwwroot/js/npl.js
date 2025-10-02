@@ -244,9 +244,12 @@
 
     function renderPopup() {
         popup = $("#popupNPL").dxPopup({
+            onShown: function () {
+                initDropdownWithInput();
+            },
             title: "Thêm / Sửa NPL",
-            width: 600,
-            maxHeight: 800,  
+            width: 800,
+            maxHeight: 1200,  
             resizeEnabled: true, 
             visible: false,
             dragEnabled: true,
@@ -316,29 +319,6 @@
             }
         });
     }
-
-
-    //function showImagePopup(images) {
-    //    $("#imageList").empty();
-    //    if (images.length === 0) {
-    //        $("#imageList").append("<p>Không có ảnh</p>");
-    //    } else {
-    //        images.forEach(src => {
-    //            $("<img>")
-    //                .attr("src", src)
-    //                .css({ width: "120px", height: "120px", objectFit: "cover", borderRadius: "6px" })
-    //                .appendTo("#imageList");
-    //        });
-    //    }
-    //    $("#popupImageViewer").dxPopup({
-    //        title: "Xem ảnh",
-    //        width: 600,
-    //        height: 400,
-    //        visible: true,
-    //        showCloseButton: true,
-    //        hideOnOutsideClick: true
-    //    });
-    //}
     function showImagePopup(images) {
         $("#imageList").empty();
 
@@ -410,26 +390,6 @@
         });
     }
 
-    //function showFilePopup(files) {
-    //    $("#fileList").empty();
-    //    if (files.length === 0) {
-    //        $("#fileList").append("<li>Không có file</li>");
-    //    } else {
-    //        files.forEach(url => {
-    //            $("<li>")
-    //                .append($("<a>").attr("href", url).attr("target", "_blank").text("Tải file"))
-    //                .appendTo("#fileList");
-    //        });
-    //    }
-    //    $("#popupFileViewer").dxPopup({
-    //        title: "Xem file",
-    //        width: 500,
-    //        height: 300,
-    //        visible: true,
-    //        showCloseButton: true,
-    //        hideOnOutsideClick: true
-    //    });
-    //}
     function showFilePopup(files) {
         $("#fileList").empty();
 
@@ -494,47 +454,47 @@
         });
     }
 
-    function openUploadPopup() {
-        $("#popupUploadImage").dxPopup({
-            title: "Upload ảnh cho NPL",
-            width: 600,
-            height: "auto",
-            visible: true,
-            showCloseButton: true,
-            dragEnabled: true,
-            hideOnOutsideClick: true,
-            contentTemplate: function (contentElement) {
-                contentElement.append(`
-                <form id="uploadForm" enctype="multipart/form-data">
-                    <div id="imageInputs"></div>
-                    <button type="button" class="btn btn-secondary" onclick="addImageInput()">➕ Thêm ảnh</button>
-                    <br/><br/>
-                    <button type="submit" class="btn btn-success">Upload</button>
-                </form> 
-            `);
+    //function openUploadPopup() {
+    //    $("#popupUploadImage").dxPopup({
+    //        title: "Upload ảnh cho NPL",
+    //        width: 600,
+    //        height: "auto",
+    //        visible: true,
+    //        showCloseButton: true,
+    //        dragEnabled: true,
+    //        hideOnOutsideClick: true,
+    //        contentTemplate: function (contentElement) {
+    //            contentElement.append(`
+    //            <form id="uploadForm" enctype="multipart/form-data">
+    //                <div id="imageInputs"></div>
+    //                <button type="button" class="btn btn-secondary" onclick="addImageInput()">➕ Thêm ảnh</button>
+    //                <br/><br/>
+    //                <button type="submit" class="btn btn-success">Upload</button>
+    //            </form> 
+    //        `);
 
-                $("#uploadForm").on("submit", function (e) {
-                    e.preventDefault();
-                    let formData = new FormData(this);
+    //            $("#uploadForm").on("submit", function (e) {
+    //                e.preventDefault();
+    //                let formData = new FormData(this);
 
-                    $.ajax({
-                        url: '/NPLImage/UploadTemp',
-                        type: 'POST',
-                        data: formData,
-                        processData: false,
-                        contentType: false,
-                        success: function (res) {
-                            DevExpress.ui.notify("Upload thành công!", "success", 2000);
-                            $("#popupUploadImage").dxPopup("instance").hide();
-                        },
-                        error: function () {
-                            DevExpress.ui.notify("Có lỗi xảy ra", "error", 2000);
-                        }
-                    });
-                });
-            }
-        });
-    }
+    //                $.ajax({
+    //                    url: '/NPLImage/UploadTemp',
+    //                    type: 'POST',
+    //                    data: formData,
+    //                    processData: false,
+    //                    contentType: false,
+    //                    success: function (res) {
+    //                        DevExpress.ui.notify("Upload thành công!", "success", 2000);
+    //                        $("#popupUploadImage").dxPopup("instance").hide();
+    //                    },
+    //                    error: function () {
+    //                        DevExpress.ui.notify("Có lỗi xảy ra", "error", 2000);
+    //                    }
+    //                });
+    //            });
+    //        }
+    //    });
+    //}
     // ---------------- CAMERA & PREVIEW -----------------
     document.getElementById("btnOpenCamera").addEventListener("click", async function () {
         try {
@@ -616,6 +576,55 @@
         wrapper.appendChild(img);
         wrapper.appendChild(del);
         preview.appendChild(wrapper);
+    }
+    function initDropdownWithInput() {
+        // Màu
+        $("#ColorNpl").dxSelectBox({
+            placeholder: "Chọn hoặc nhập màu...",
+            dataSource: new DevExpress.data.CustomStore({
+                loadMode: "raw",
+                load: function () {
+                    return $.getJSON("/NPL/GetColors");
+                }
+            }),
+            searchEnabled: true,
+            acceptCustomValue: true,
+            onValueChanged: function (e) {
+                console.log("Màu:", e.value);
+            }
+        });
+
+        // Đơn vị
+        $("#DonVi").dxSelectBox({
+            placeholder: "Chọn hoặc nhập đơn vị...",
+            dataSource: new DevExpress.data.CustomStore({
+                loadMode: "raw",
+                load: function () {
+                    return $.getJSON("/NPL/GetUnits");
+                }
+            }),
+            searchEnabled: true,
+            acceptCustomValue: true,
+            onValueChanged: function (e) {
+                console.log("Đơn vị:", e.value);
+            }
+        });
+
+        // Loại
+        $("#Loai").dxSelectBox({
+            placeholder: "Chọn hoặc nhập loại...",
+            dataSource: new DevExpress.data.CustomStore({
+                loadMode: "raw",
+                load: function () {
+                    return $.getJSON("/NPL/GetTypes");
+                }
+            }),
+            searchEnabled: true,
+            acceptCustomValue: true,
+            onValueChanged: function (e) {
+                console.log("Loại:", e.value);
+            }
+        });
     }
 
     return {
