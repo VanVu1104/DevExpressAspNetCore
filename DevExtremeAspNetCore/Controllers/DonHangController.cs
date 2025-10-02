@@ -42,9 +42,9 @@ namespace DevExtremeAspNetCore.Controllers
                 TongSoLuong = g.Sum(x => x.SoLuong)
             })
             .ToList();
-
             return View(result);
         }
+
 
 
         [HttpGet]
@@ -73,8 +73,8 @@ namespace DevExtremeAspNetCore.Controllers
                 TongSoLuong = g.Sum(x => x.SoLuong)
             })
             .ToList();
-
             return View("Index", result);
         }
+    
     }
 }

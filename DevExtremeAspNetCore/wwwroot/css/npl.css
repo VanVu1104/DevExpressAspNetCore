@@ -36,6 +36,7 @@
 .dx-datagrid-rowsview .dx-data-row:hover {
     background-color: #59AC77 !important;
     color: #fff !important;
+    font-weight:bold
 }
 
 .dx-toolbar .dx-button {
@@ -198,16 +199,12 @@
     font-size: 15px;
     display: flex;
     align-items: center;
-    gap: 6px;
-    transition: all 0.25s ease-in-out;
     border: none !important;
 }
 
     /* Hover */
     .btn-add-npl .dx-button-content:hover {
-        background: linear-gradient(135deg, #42a5f5, #2196f3);
-        box-shadow: 0 6px 12px rgba(33, 150, 243, 0.45);
-        transform: translateY(-2px);
+        background: #1e3799
     }
 
 /* Icon trắng */
@@ -228,13 +225,6 @@
     background-color: #fff !important;
 }
 
-/* Đồng bộ màu trắng cho filter row ở cột Ảnh, File, Thao tác */
-.dx-datagrid-filter-row td[aria-label="Ảnh"],
-.dx-datagrid-filter-row td[aria-label="File"],
-.dx-datagrid-filter-row td[aria-label="Thao tác"],
-.dx-datagrid-filter-row td[aria-label="Ghi chú"] {
-    background-color: #fff !important;
-}
 .action-wrap .dx-button {
     border-radius: 6px; /* bo tròn nhẹ */
     transition: all 0.2s ease;
@@ -393,3 +383,156 @@
         font-weight: bold;
         border-color: #ffffff !important;
     }
+#imagePreview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    max-height: 180px; /* Giới hạn chiều cao */
+    overflow-y: auto; /* Cho phép scroll khi nhiều ảnh */
+    padding: 5px;
+    border: 1px solid #ddd; /* viền nhẹ */
+    border-radius: 6px;
+}
+
+.img-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.preview-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 6px;
+    object-fit: cover;
+    border: 1px solid #ccc;
+}
+
+.btn-del-img {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: red;
+    border: none;
+    color: white;
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+/* === Style chung cho tất cả popup trong trang đơn hàng === */
+.dx-popup {
+    border-radius: 12px !important; /* bo góc popup */
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2) !important; /* đổ bóng nhẹ */
+    overflow: hidden;
+    font-family: "Roboto", sans-serif;
+}
+
+/* Header */
+.dx-popup-title {
+    background: #198754 !important;
+    color: #fff !important;
+    font-size: 18px !important;
+    font-weight: bold !important;
+    padding: 12px 16px !important;
+    border-bottom: none !important;
+}
+
+/* Nội dung popup */
+.dx-popup-content {
+    padding: 16px !important;
+    background: #fdfdfd;
+    max-height: 70vh; /* giới hạn chiều cao để tránh tràn */
+    overflow-y: auto; /* cuộn khi nội dung dài */
+}
+
+/* Nút đóng (X) */
+.dx-popup-title .dx-closebutton {
+    background: rgba(255,255,255,0.2) !important;
+    border-radius: 50% !important;
+    transition: 0.2s;
+}
+
+    .dx-popup-title .dx-closebutton:hover {
+        background: rgba(255,255,255,0.4) !important;
+    }
+
+/* Footer (nếu có) */
+.dx-popup-bottom {
+    background: #fafafa;
+    border-top: 1px solid #ddd;
+    padding: 10px 16px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+    /* Nút trong popup */
+    .dx-popup-bottom .dx-button {
+        border-radius: 8px !important;
+        font-weight: 500 !important;
+    }
+
+/* Scrollbar đẹp hơn */
+.dx-popup-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.dx-popup-content::-webkit-scrollbar-thumb {
+    background: #bbb;
+    border-radius: 4px;
+}
+
+    .dx-popup-content::-webkit-scrollbar-thumb:hover {
+        background: #888;
+    }
+/* Nút chung trong popup */
+.dx-popup-bottom .dx-button {
+    min-width: 60px;
+    height:auto;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 12px;
+    transition: all 0.2s ease-in-out;
+    border: none;
+}
+
+    /* Nút Lưu */
+    .dx-popup-bottom .dx-button-success,
+    .dx-popup-bottom .dx-button[aria-label="Lưu"] {
+        background: #06923E !important;
+        color: #fff !important;
+    }
+
+        .dx-popup-bottom .dx-button-success:hover,
+        .dx-popup-bottom .dx-button[aria-label="Lưu"]:hover {
+            background: #93DA97 !important;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+    /* Nút Hủy */
+    .dx-popup-bottom .dx-button-danger,
+    .dx-popup-bottom .dx-button[aria-label="Hủy"] {
+        background: #DDF6D2 !important;
+        color: #333 !important;
+    }
+
+        .dx-popup-bottom .dx-button-danger:hover,
+        .dx-popup-bottom .dx-button[aria-label="Hủy"]:hover {
+            background: #FFFFFF !important;
+            transform: translateY(-1px);
+        }
+
+/* Khi 2 nút nằm cạnh nhau thì cách đều */
+.dx-popup-bottom {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+

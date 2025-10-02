@@ -1,4 +1,5 @@
 ﻿using DevExtremeAspNetCore.Repository;
+using DevExtremeAspNetCore.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DevExtremeAspNetCore.Controllers
@@ -17,6 +18,35 @@ namespace DevExtremeAspNetCore.Controllers
             var nplList = await _nplRepo.GetAllAsync();
             return View(nplList);
         }
+        [HttpPost]
+        public async Task<IActionResult> Create(NPLViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                await _nplRepo.AddAsync(model);
+                return RedirectToAction("Index");
+            }
+            return View("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(NPLViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                await _nplRepo.UpdateAsync(model);
+                return RedirectToAction("Index");
+            }
+            return View("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(string id)
+        {
+            await _nplRepo.DeleteAsync(id);
+            return RedirectToAction("Index");
+        }
+
     }
 
 }

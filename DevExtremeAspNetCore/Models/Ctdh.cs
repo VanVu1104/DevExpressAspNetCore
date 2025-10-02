@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using DevExtremeAspNetCore.ViewModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace DevExtremeAspNetCore.Models;
@@ -39,16 +40,18 @@ public partial class Ctdh
 
     [ForeignKey("Iddh")]
     [InverseProperty("Ctdhs")]
-    public virtual DonHangModels IddhNavigation { get; set; }
+    public virtual DonHangViewModel IddhNavigation { get; set; }
 
-    [ForeignKey("Idpro")]
     [InverseProperty("Ctdhs")]
     public virtual ProductModels IdproNavigation { get; set; }
 
     [ForeignKey("Idsize")]
     [InverseProperty("Ctdhs")]
+
     public virtual Size IdsizeNavigation { get; set; }
 
+    [ForeignKey("Idcolor")]
+    public virtual Color IdcolorNavigation { get; set; }
 
     [InverseProperty("IdctdhNavigation")]
     public virtual ICollection<NoteChiTietDonHang> NoteChiTietDonHangs { get; set; } = new List<NoteChiTietDonHang>();

@@ -11,6 +11,7 @@ namespace DevExtremeAspNetCore.Repository
         {
             _db = db;
         }
+
         public async Task<PagedResult<ChiTietDonHangViewModel>> GetAllAsync(int pageNumber = 1, int pageSize = 10)
         {
             var donHangs = await _db.DonHangs
@@ -85,7 +86,6 @@ namespace DevExtremeAspNetCore.Repository
                 Items = items
             };
         }
-
 
         public async Task<List<string>> GetAllSize()
         {

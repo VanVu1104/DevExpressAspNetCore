@@ -56,13 +56,14 @@ public partial class AppDbContext : DbContext
             entity.HasOne(d => d.IdcolorNavigation).WithMany(p => p.Ctdhs).HasConstraintName("FK_CTDH_Color");
 
             entity.HasOne(d => d.IddhNavigation).WithMany(p => p.Ctdhs)
+                .HasForeignKey(d => d.Iddh)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__CTDH__IDDH__33D4B598");
-
             entity.HasOne(d => d.IdproNavigation).WithMany(p => p.Ctdhs).HasConstraintName("FK_CTDH_Product");
 
             entity.HasOne(d => d.IdsizeNavigation).WithMany(p => p.Ctdhs).HasConstraintName("FK_CTDH_Size");
         });
+
 
         modelBuilder.Entity<DonHangModels>(entity =>
         {
